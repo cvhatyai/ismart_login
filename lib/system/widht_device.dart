@@ -7,6 +7,8 @@ class WidhtDevice {
       widht = widht / 4;
     } else if (widht >= 1360) {
       widht = widht / 3;
+    } else if (widht >= 1020) {
+      widht = widht / 2.5;
     } else if (widht >= 768) {
       widht = widht / 2;
     }
