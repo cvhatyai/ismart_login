@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ismart_login/page/signup/signup_screen.dart';
+import 'package:ismart_login/page/sign/signin_screen.dart';
 
 void main() {
   runApp(MyApp());

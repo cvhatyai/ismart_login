@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ismart_login/page/front/front_screen.dart';
+import 'package:ismart_login/page/sign/signup_screen.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/style/font_style.dart';
 
@@ -49,6 +52,14 @@ class _SignupScreenState extends State<SignupScreen> {
           GestureDetector(
             onTap: () {
               print('เข้าสู่ระบบ');
+              SpinKitWave(
+                color: Colors.white,
+                size: 50.0,
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FrontScreen()),
+              );
             },
             child: Container(
               padding: EdgeInsets.only(left: 25, right: 25),
@@ -74,7 +85,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: StylePage().background,
         child: SafeArea(
           child: Container(
@@ -145,6 +156,13 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                             ),
                             GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SigninScreen()),
+                                );
+                              },
                               child: Text('ลงทะเบียน',
                                   style: TextStyle(
                                       fontFamily: FontStyles().FontFamily,
