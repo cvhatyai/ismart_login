@@ -5,6 +5,7 @@ import 'package:ismart_login/page/front/front_screen.dart';
 import 'package:ismart_login/page/sign/signup_screen.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/style/font_style.dart';
+import 'package:ismart_login/system/widht_device.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -90,6 +91,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: SafeArea(
           child: Container(
             padding: EdgeInsets.only(left: 20, right: 20),
+            width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -107,7 +109,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Container(
                   padding:
                       EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 20),
-                  width: MediaQuery.of(context).size.width,
+                  width: WidhtDevice().widht(context),
                   decoration: StylePage().boxWhite,
                   child: Column(
                     children: [
