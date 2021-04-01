@@ -1,19 +1,69 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/style/page_style.dart';
+import 'package:ismart_login/system/clock.dart';
 import 'package:ismart_login/system/widht_device.dart';
 
 class FrontScreen extends StatefulWidget {
+  final List<ItemsMemberList> item;
+  FrontScreen({Key key, @required this.item}) : super(key: key);
   @override
   _FrontScreenState createState() => _FrontScreenState();
 }
 
 class _FrontScreenState extends State<FrontScreen> {
+  List<ItemsMemberList> _items = [];
+  String _dateString;
+  String _timeString;
+  //----
   TextStyle styleTime = TextStyle(
       fontFamily: FontStyles().FontFamily, fontSize: 24, color: Colors.white);
   TextStyle styleLabel =
       TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 18, height: 1);
+  //-----
+  @override
+  void initState() {
+    _timeString = _formatTime(DateTime.now());
+    Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
+    _dateString = _formatDate(DateTime.now());
+    Timer.periodic(Duration(seconds: 1), (Timer t) => _getDate());
+    _items = widget.item;
+    super.initState();
+  }
+
+  void _getTime() {
+    final DateTime now = DateTime.now();
+    final String formattedDateTime = _formatTime(now);
+    setState(() {
+      _timeString = formattedDateTime;
+    });
+  }
+
+  String _formatTime(DateTime dateTime) {
+    return DateFormat('HH.mm').format(dateTime);
+  }
+
+  void _getDate() {
+    final DateTime now = DateTime.now();
+    final String formattedDateTime = _formatDate(now);
+    List date = formattedDateTime.split("-");
+    String day = date[0];
+    String month = Clock().thMonth[int.parse(date[1])];
+    String year = (int.parse(date[2]) + 543).toString();
+    String display = day + ' ' + month + ' ' + year;
+    setState(() {
+      _dateString = display;
+    });
+  }
+
+  String _formatDate(DateTime dateTime) {
+    return DateFormat('d-M-y').format(dateTime);
+  }
 
   Widget countPerson() {
     return Container(
@@ -382,7 +432,7 @@ class _FrontScreenState extends State<FrontScreen> {
                                       Container(
                                         child: SingleChildScrollView(
                                           child: Text(
-                                            'ธีรเวช ดำรงทอง',
+                                            _items[0].FULLNAME,
                                             style: TextStyle(
                                                 fontFamily:
                                                     FontStyles().FontFamily,
@@ -394,7 +444,7 @@ class _FrontScreenState extends State<FrontScreen> {
                                       Container(
                                         child: SingleChildScrollView(
                                           child: Text(
-                                            'Cityvariety',
+                                            _items[0].ORG_NAME,
                                             style: TextStyle(
                                                 fontFamily:
                                                     FontStyles().FontFamily,
@@ -441,7 +491,7 @@ class _FrontScreenState extends State<FrontScreen> {
                                       child: Row(
                                         children: [
                                           Text(
-                                            '7.58 น. ',
+                                            '' + ' น. ',
                                             style: styleTime,
                                           ),
                                           GestureDetector(
@@ -472,7 +522,7 @@ class _FrontScreenState extends State<FrontScreen> {
                             children: [
                               Container(
                                 child: Text(
-                                  '07.58',
+                                  _timeString.toString(),
                                   style: TextStyle(
                                       fontFamily: FontStyles().FontFamily,
                                       fontSize: 50,
@@ -483,7 +533,7 @@ class _FrontScreenState extends State<FrontScreen> {
                                 width: MediaQuery.of(context).size.width,
                                 alignment: Alignment.center,
                                 child: Text(
-                                  '12 กุมภาพันธ์ 64',
+                                  _dateString,
                                   style: TextStyle(
                                       fontFamily: FontStyles().FontFamily,
                                       fontSize: 26),

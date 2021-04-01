@@ -1,23 +1,64 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ismart_login/page/front/front_screen.dart';
+import 'package:ismart_login/page/sign/future/singin_future.dart';
+import 'package:ismart_login/page/sign/model/memberresult.dart';
 import 'package:ismart_login/page/sign/signup_screen.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/system/widht_device.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignInScreen extends StatefulWidget {
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  _SignInScreenState createState() => _SignInScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignInScreenState extends State<SignInScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _inputUsername = TextEditingController();
+  TextEditingController _inputPassword = TextEditingController();
+  //--- Map get Value
+  _postDataInput() {
+    Map _map = {
+      "USERNAME": _inputUsername.text,
+      "PASSWORD": _inputPassword.text,
+    };
+    return _map;
+  }
+
+  //--API
+  List<ItemsMemberResult> _result = [];
+  Future<bool> onLoadInsertMember(Map map) async {
+    await new SigninFuture().apiSelectMember(map).then((onValue) {
+      _result = onValue;
+      print(_result[0].MSG);
+      if (_result[0].MSG == 'success') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FrontScreen(
+              item: _result[0].RESULT,
+            ),
+          ),
+        );
+      }
+    });
+    setState(() {});
+    return true;
+  }
+
   Widget formlogin() {
     return Form(
+      key: _formKey,
       child: Column(
         children: [
           TextFormField(
+            controller: _inputUsername,
+            keyboardType: TextInputType.number,
             style: TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 24),
             decoration: InputDecoration(
               hintText: 'เบอร์โทรศัพท์',
@@ -33,6 +74,9 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           ),
           TextFormField(
+            controller: _inputPassword,
+            obscureText: true,
+            keyboardType: TextInputType.visiblePassword,
             style: TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 24),
             decoration: InputDecoration(
               hintText: 'รหัสผ่าน',
@@ -52,15 +96,14 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
           GestureDetector(
             onTap: () {
-              print('เข้าสู่ระบบ');
-              SpinKitWave(
-                color: Colors.white,
-                size: 50.0,
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FrontScreen()),
-              );
+              if (_formKey.currentState.validate()) {
+                onLoadInsertMember(_postDataInput());
+                SpinKitWave(
+                  color: Colors.white,
+                  size: 50.0,
+                );
+                print('เข้าสู่ระบบ');
+              }
             },
             child: Container(
               padding: EdgeInsets.only(left: 25, right: 25),
@@ -162,7 +205,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SigninScreen()),
+                                      builder: (context) => SignUpScreen()),
                                 );
                               },
                               child: Text('ลงทะเบียน',
