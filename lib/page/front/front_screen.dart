@@ -1,17 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:ismart_login/page/front/front_count_widget.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/system/clock.dart';
+import 'package:ismart_login/system/shared_preferences.dart';
 import 'package:ismart_login/system/widht_device.dart';
 
 class FrontScreen extends StatefulWidget {
-  final List<ItemsMemberList> item;
-  FrontScreen({Key key, @required this.item}) : super(key: key);
   @override
   _FrontScreenState createState() => _FrontScreenState();
 }
@@ -21,18 +23,33 @@ class _FrontScreenState extends State<FrontScreen> {
   String _dateString;
   String _timeString;
   //----
+  //Setup
+  PickedFile _imageFile;
+  dynamic _pickImageError;
+  //-----
   TextStyle styleTime = TextStyle(
       fontFamily: FontStyles().FontFamily, fontSize: 24, color: Colors.white);
-  TextStyle styleLabel =
-      TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 18, height: 1);
+  TextStyle styleLabelCamera = TextStyle(
+      fontFamily: FontStyles().FontFamily,
+      fontSize: 26,
+      fontWeight: FontWeight.bold,
+      height: 1);
+  TextStyle styleDetailCamera = TextStyle(
+      fontFamily: FontStyles().FontFamily,
+      fontSize: 18,
+      color: Color(0xFF8D8B8B),
+      height: 1);
   //-----
+  var map;
+
   @override
   void initState() {
+    print(SharedCashe().getItemsMemberList());
     _timeString = _formatTime(DateTime.now());
     Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     _dateString = _formatDate(DateTime.now());
     Timer.periodic(Duration(seconds: 1), (Timer t) => _getDate());
-    _items = widget.item;
+
     super.initState();
   }
 
@@ -63,311 +80,6 @@ class _FrontScreenState extends State<FrontScreen> {
 
   String _formatDate(DateTime dateTime) {
     return DateFormat('d-M-y').format(dateTime);
-  }
-
-  Widget countPerson() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey[400],
-                    width: 1,
-                  ),
-                  right: BorderSide(
-                    color: Colors.grey[400],
-                    width: 1,
-                  ),
-                ),
-              ),
-              padding: EdgeInsets.only(left: 5, right: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Text(
-                                  '23',
-                                  style: TextStyle(
-                                      fontSize: 50,
-                                      fontFamily: FontStyles().FontThaiSans,
-                                      height: 0.6),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 20,
-                                height: 3,
-                                color: Color(0xFFFF802C),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: [
-                              Text('คน',
-                                  style: TextStyle(
-                                      fontFamily: FontStyles().FontFamily,
-                                      fontSize: 20)),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Color(0xFF18C0FF),
-                                size: 18,
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      'ยังไม่ลงเวลา',
-                      style: styleLabel,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey[400],
-                    width: 1,
-                  ),
-                  right: BorderSide(
-                    color: Colors.grey[400],
-                    width: 1,
-                  ),
-                ),
-              ),
-              padding: EdgeInsets.only(left: 5, right: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Text(
-                                  '23',
-                                  style: TextStyle(
-                                      fontSize: 50,
-                                      fontFamily: FontStyles().FontThaiSans,
-                                      height: 0.6),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 20,
-                                height: 3,
-                                color: Color(0xFFA7D645),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: [
-                              Text('คน',
-                                  style: TextStyle(
-                                      fontFamily: FontStyles().FontFamily,
-                                      fontSize: 20)),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Color(0xFF18C0FF),
-                                size: 18,
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      'ทันเวลา',
-                      style: styleLabel,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey[400],
-                    width: 1,
-                  ),
-                  right: BorderSide(
-                    color: Colors.grey[400],
-                    width: 1,
-                  ),
-                ),
-              ),
-              padding: EdgeInsets.only(left: 5, right: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Text(
-                                  '23',
-                                  style: TextStyle(
-                                      fontSize: 50,
-                                      fontFamily: FontStyles().FontThaiSans,
-                                      height: 0.6),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 20,
-                                height: 3,
-                                color: Color(0xFFD50000),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: [
-                              Text('คน',
-                                  style: TextStyle(
-                                      fontFamily: FontStyles().FontFamily,
-                                      fontSize: 20)),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Color(0xFF18C0FF),
-                                size: 18,
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      'สาย',
-                      style: styleLabel,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey[400],
-                    width: 1,
-                  ),
-                ),
-              ),
-              padding: EdgeInsets.only(left: 5, right: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Text(
-                                  '23',
-                                  style: TextStyle(
-                                      fontSize: 50,
-                                      fontFamily: FontStyles().FontThaiSans,
-                                      height: 0.6),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 20,
-                                height: 3,
-                                color: Color(0xFFFF802C),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: [
-                              Text('คน',
-                                  style: TextStyle(
-                                      fontFamily: FontStyles().FontFamily,
-                                      fontSize: 20)),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Color(0xFF18C0FF),
-                                size: 18,
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      'ลา',
-                      style: styleLabel,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -423,32 +135,37 @@ class _FrontScreenState extends State<FrontScreen> {
                               ),
                               Expanded(
                                 child: Container(
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: EdgeInsets.only(left: 10, top: 5),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
                                           child: Text(
                                             _items[0].FULLNAME,
                                             style: TextStyle(
                                                 fontFamily:
                                                     FontStyles().FontFamily,
-                                                fontSize: 24,
+                                                fontSize: 28,
+                                                height: 1,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                       ),
                                       Container(
                                         child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
                                           child: Text(
                                             _items[0].ORG_NAME,
                                             style: TextStyle(
                                                 fontFamily:
                                                     FontStyles().FontFamily,
                                                 fontSize: 20,
+                                                height: 1,
                                                 fontWeight: FontWeight.normal),
                                           ),
                                         ),
@@ -481,7 +198,7 @@ class _FrontScreenState extends State<FrontScreen> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      '12 กุมภาพันธ์ 2563',
+                                      _dateString,
                                       style: styleTime,
                                     ),
                                     SizedBox(
@@ -491,7 +208,7 @@ class _FrontScreenState extends State<FrontScreen> {
                                       child: Row(
                                         children: [
                                           Text(
-                                            '' + ' น. ',
+                                            _timeString + ' น. ',
                                             style: styleTime,
                                           ),
                                           GestureDetector(
@@ -499,7 +216,7 @@ class _FrontScreenState extends State<FrontScreen> {
                                             child: FaIcon(
                                               FontAwesomeIcons.sync,
                                               color: Colors.white,
-                                              size: 20,
+                                              size: 18,
                                             ),
                                           ),
                                         ],
@@ -511,7 +228,7 @@ class _FrontScreenState extends State<FrontScreen> {
                             ],
                           ),
                         ),
-                        countPerson(),
+                        FrontCountWidget(),
                         Container(
                           padding: EdgeInsets.only(top: 10),
                           alignment: Alignment.center,
@@ -525,8 +242,8 @@ class _FrontScreenState extends State<FrontScreen> {
                                   _timeString.toString(),
                                   style: TextStyle(
                                       fontFamily: FontStyles().FontFamily,
-                                      fontSize: 50,
-                                      height: 0.6),
+                                      fontSize: 70,
+                                      height: 0.5),
                                 ),
                               ),
                               Container(
@@ -536,8 +253,192 @@ class _FrontScreenState extends State<FrontScreen> {
                                   _dateString,
                                   style: TextStyle(
                                       fontFamily: FontStyles().FontFamily,
-                                      fontSize: 26),
+                                      fontSize: 26,
+                                      height: 1),
                                 ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.all(10)),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _imgFromCamera();
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.only(bottom: 5),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.grey[400],
+                                          width: 1,
+                                        ),
+                                        right: BorderSide(
+                                          color: Colors.grey[400],
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(10),
+                                          width: 120,
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFD6F5FF),
+                                              shape: BoxShape.circle),
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                color: Color(0xFFA7E9FF),
+                                                shape: BoxShape.circle),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xFF36C8FF),
+                                                  shape: BoxShape.circle),
+                                              child: Icon(
+                                                Icons.camera_alt,
+                                                size: 50,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          'เข้างาน',
+                                          style: styleLabelCamera,
+                                        ),
+                                        Text(
+                                          'ถ่ายรูปคุณคู่กับสถานที่',
+                                          style: styleDetailCamera,
+                                        ),
+                                        Text(
+                                          'เวลาเข้างาน 8.00 น.',
+                                          style: styleDetailCamera,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _imgFromCamera();
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.only(bottom: 5),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.grey[400],
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(10),
+                                          width: 120,
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFFFEDCE),
+                                              shape: BoxShape.circle),
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                color: Color(0xFFFAD7A0),
+                                                shape: BoxShape.circle),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xFFFFAF36),
+                                                  shape: BoxShape.circle),
+                                              child: Icon(
+                                                Icons.camera_alt,
+                                                size: 50,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          'ออกงาน',
+                                          style: styleLabelCamera,
+                                        ),
+                                        Text(
+                                          'ถ่ายรูปคุณคู่กับสถานที่',
+                                          style: styleDetailCamera,
+                                        ),
+                                        Text(
+                                          'เวลาออกงาน 8.00 น.',
+                                          style: styleDetailCamera,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.all(5)),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'รายการที่บันทึก',
+                                style: TextStyle(
+                                    fontFamily: FontStyles().FontFamily,
+                                    fontSize: 24,
+                                    height: 1,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 6),
+                                child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: 5,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Container(
+                                        alignment: Alignment.centerLeft,
+                                        margin: EdgeInsets.only(bottom: 6),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 15,
+                                              height: 15,
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xFF36C8FF),
+                                                  shape: BoxShape.circle),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                  padding:
+                                                      EdgeInsets.only(left: 5),
+                                                  child: Text(
+                                                    'เข้างาน เมื่อเวลา 7.45 น.',
+                                                    style: TextStyle(
+                                                        fontFamily: FontStyles()
+                                                            .FontFamily,
+                                                        fontSize: 20,
+                                                        height: 1),
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
                               ),
                             ],
                           ),
@@ -551,6 +452,61 @@ class _FrontScreenState extends State<FrontScreen> {
           ),
         ),
       ),
+      floatingActionButton: Container(
+        width: 100,
+        height: 130,
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 10,
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 5)
+                  ],
+                ),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.add,
+                    size: 50.0,
+                  ),
+                ),
+              ),
+            ),
+            Padding(padding: EdgeInsets.all(1)),
+            Text(
+              'ทำงานนอกสถานที่',
+              style:
+                  TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 18),
+            )
+          ],
+        ),
+      ),
     );
+  }
+
+  _imgFromCamera() async {
+    try {
+      final pickedFile = await ImagePicker().getImage(
+        source: ImageSource.camera,
+        imageQuality: 50,
+      );
+      setState(() {
+        _imageFile = pickedFile;
+      });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+        print(_pickImageError.toString());
+      });
+    }
   }
 }

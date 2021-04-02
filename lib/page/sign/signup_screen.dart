@@ -145,54 +145,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
             },
             child: Container(
               child: Center(
-                child: ClipOval(
-                  child: Center(
+                child: Container(
+                  child: ClipOval(
                     child: Container(
-                      child: ClipOval(
-                        child: Container(
-                          width: 150,
-                          height: 150,
-                          color: Color(0xFFA6D6F2),
-                          child: Column(
-                            children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                  child: Center(
-                                    child: _imageFile == null
-                                        ? Icon(
-                                            Icons.person,
-                                            size: 100,
-                                            color: Colors.white,
-                                          )
-                                        : Image.file(
-                                            File(_imageFile.path),
-                                            fit: BoxFit.cover,
-                                            width: 300.0,
-                                            height: 300.0,
-                                          ),
-                                  ),
-                                ),
+                      width: 150,
+                      height: 150,
+                      color: Color(0xFFA6D6F2),
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              child: Center(
+                                child: _imageFile == null
+                                    ? Icon(
+                                        Icons.person,
+                                        size: 140,
+                                        color: Colors.white,
+                                      )
+                                    : Image.file(
+                                        File(_imageFile.path),
+                                        fit: BoxFit.cover,
+                                        width: 300.0,
+                                        height: 300.0,
+                                      ),
                               ),
-                              Container(
-                                height: 33.0,
-                                width: double.infinity,
-                                color: Color(0xFF7B7B7B),
-                                child: Center(
-                                  child: Container(
-                                    child: Text('เพิ่มรูปภาพ',
-                                        textScaleFactor: 1.0,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18.0,
-                                            fontFamily:
-                                                FontStyles().FontFamily),
-                                        textAlign: TextAlign.center),
-                                  ),
-                                ),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
+                          Container(
+                            height: 33.0,
+                            width: double.infinity,
+                            color: Color(0xFF7B7B7B),
+                            child: Center(
+                              child: Container(
+                                child: Text('เพิ่มรูปภาพ',
+                                    textScaleFactor: 1.0,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0,
+                                        fontFamily: FontStyles().FontFamily),
+                                    textAlign: TextAlign.center),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -200,6 +195,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
+          Padding(padding: EdgeInsets.all(10)),
           Row(
             children: [
               Expanded(

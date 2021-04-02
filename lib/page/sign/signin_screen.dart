@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ismart_login/page/front/front_screen.dart';
+import 'package:ismart_login/page/main.dart';
 import 'package:ismart_login/page/sign/future/singin_future.dart';
+import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/page/sign/model/memberresult.dart';
 import 'package:ismart_login/page/sign/signup_screen.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/style/font_style.dart';
+import 'package:ismart_login/system/shared_preferences.dart';
 import 'package:ismart_login/system/widht_device.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -35,16 +38,15 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<bool> onLoadInsertMember(Map map) async {
     await new SigninFuture().apiSelectMember(map).then((onValue) {
       _result = onValue;
-      print(_result[0].MSG);
+      print(onValue.length);
       if (_result[0].MSG == 'success') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FrontScreen(
-              item: _result[0].RESULT,
-            ),
-          ),
-        );
+        SharedCashe.saveItemsMemberList(item: _result[0].RESULT);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => MainPage(),
+        //   ),
+        // );
       }
     });
     setState(() {});
