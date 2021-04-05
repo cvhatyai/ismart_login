@@ -4,15 +4,15 @@ import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedCashe {
-  static saveItemsMemberList({List<ItemsMemberList> item}) async {
+  static saveItemsMemberList({List<dynamic> item}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(item[0].FULLNAME);
+    print(json.encode(item));
+    prefs.setString('item', json.encode(item));
   }
 
-  getItemsMemberList() async {
+  static getItemsMemberList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String item = prefs.getString('item');
-    print(item);
     return item;
   }
 }

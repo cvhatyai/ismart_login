@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ismart_login/page/sign/signin_screen.dart';
+import 'package:ismart_login/page/splashscreen/splashscreen_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: SignInScreen(),
+      home: SplashscreenScreen(),
     );
   }
 }

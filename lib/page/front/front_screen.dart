@@ -12,6 +12,7 @@ import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/system/clock.dart';
 import 'package:ismart_login/system/shared_preferences.dart';
 import 'package:ismart_login/system/widht_device.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FrontScreen extends StatefulWidget {
   @override
@@ -44,12 +45,10 @@ class _FrontScreenState extends State<FrontScreen> {
 
   @override
   void initState() {
-    print(SharedCashe().getItemsMemberList());
     _timeString = _formatTime(DateTime.now());
     Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     _dateString = _formatDate(DateTime.now());
     Timer.periodic(Duration(seconds: 1), (Timer t) => _getDate());
-
     super.initState();
   }
 
@@ -78,21 +77,29 @@ class _FrontScreenState extends State<FrontScreen> {
     });
   }
 
+  _getShaerd() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String item = prefs.getString('item');
+    _items =
+        List.from(json.decode(item).map((m) => ItemsMemberList.fromJson(m)));
+  }
+
   String _formatDate(DateTime dateTime) {
     return DateFormat('d-M-y').format(dateTime);
   }
 
   @override
   Widget build(BuildContext context) {
+    _getShaerd();
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: StylePage().background,
         child: SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-            child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Column(
                 children: [
                   Container(
@@ -146,7 +153,9 @@ class _FrontScreenState extends State<FrontScreen> {
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
                                           child: Text(
-                                            _items[0].FULLNAME,
+                                            _items.length > 0
+                                                ? _items[0].FULLNAME
+                                                : '',
                                             style: TextStyle(
                                                 fontFamily:
                                                     FontStyles().FontFamily,
@@ -160,7 +169,9 @@ class _FrontScreenState extends State<FrontScreen> {
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
                                           child: Text(
-                                            _items[0].ORG_NAME,
+                                            _items.length > 0
+                                                ? _items[0].ORG_NAME
+                                                : '',
                                             style: TextStyle(
                                                 fontFamily:
                                                     FontStyles().FontFamily,
@@ -454,7 +465,8 @@ class _FrontScreenState extends State<FrontScreen> {
       ),
       floatingActionButton: Container(
         width: 100,
-        height: 130,
+        height: 100,
+        alignment: Alignment.bottomCenter,
         child: Column(
           children: [
             GestureDetector(

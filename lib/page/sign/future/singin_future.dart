@@ -17,7 +17,7 @@ final Map<String, String> header = {
 class SigninFuture {
   SigninFuture() : super();
 //-----
-  Future<List<ItemsMemberResult>> apiSelectMember(Map jsonMap) async {
+  Future apiSelectMember(Map jsonMap) async {
     //encode Map to JSON
     var body = json.encode(jsonMap);
     final response = await http.post(
@@ -27,9 +27,7 @@ class SigninFuture {
     );
     if (response.statusCode == 200) {
       List responseJson = json.decode(response.body);
-      return responseJson
-          .map((m) => new ItemsMemberResult.fromJson(m))
-          .toList();
+      return responseJson;
     } else {
       print('Something went wrong. \nResponse Code : ${response.statusCode}');
     }

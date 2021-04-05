@@ -10,7 +10,7 @@ class FrontCountWidget extends StatefulWidget {
 
 class _FrontCountWidgetState extends State<FrontCountWidget> {
   TextStyle styleLabel =
-      TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 18, height: 1);
+      TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 16, height: 1);
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,7 +59,7 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                                 child: Text(
                                   '23',
                                   style: TextStyle(
-                                      fontSize: 50,
+                                      fontSize: 40,
                                       fontFamily: FontStyles().FontThaiSans,
                                       height: 0.6),
                                 ),
@@ -133,7 +133,7 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                                 child: Text(
                                   '23',
                                   style: TextStyle(
-                                      fontSize: 50,
+                                      fontSize: 40,
                                       fontFamily: FontStyles().FontThaiSans,
                                       height: 0.6),
                                 ),
@@ -207,7 +207,7 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                                 child: Text(
                                   '23',
                                   style: TextStyle(
-                                      fontSize: 50,
+                                      fontSize: 40,
                                       fontFamily: FontStyles().FontThaiSans,
                                       height: 0.6),
                                 ),
@@ -216,7 +216,7 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                                 alignment: Alignment.centerLeft,
                                 width: 20,
                                 height: 3,
-                                color: Color(0xFFD50000),
+                                color: Color(0xFFD40000),
                               ),
                             ],
                           ),
@@ -277,7 +277,7 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                                 child: Text(
                                   '23',
                                   style: TextStyle(
-                                      fontSize: 50,
+                                      fontSize: 40,
                                       fontFamily: FontStyles().FontThaiSans,
                                       height: 0.6),
                                 ),
