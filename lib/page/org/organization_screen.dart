@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ismart_login/page/org/join_detail_screen.dart';
+import 'package:ismart_login/page/org/join_screen.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/system/widht_device.dart';
@@ -48,6 +50,14 @@ class _OrganizationScreenState extends State<OrganizationScreen> {
                               Image.asset('assets/images/other/org_select.png'),
                         ),
                         GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrganizationJoinScreen(),
+                              ),
+                            );
+                          },
                           child: Card(
                             shadowColor: Color(0xFFE8E8E8),
                             elevation: 3.0,

@@ -15,4 +15,9 @@ class SharedCashe {
     String item = prefs.getString('item');
     return item;
   }
+
+  static clearShaeredAll() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
 }

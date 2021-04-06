@@ -100,10 +100,8 @@ class _OtpScreenState extends State<OtpScreen>
               controller: _inputOtp,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: FontStyles().FontFamily,
-                  fontSize: 30,
-                  height: 0.7),
+              style:
+                  TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 30),
               decoration: InputDecoration(
                 alignLabelWithHint: true,
                 hintText: 'OTP',
@@ -131,7 +129,7 @@ class _OtpScreenState extends State<OtpScreen>
                   'รหัส OTP จะหมดอายุภายใน ${time.min} นาที ${time.sec} วินาที',
                   style: TextStyle(
                       fontFamily: FontStyles().FontFamily,
-                      fontSize: 20,
+                      fontSize: 18,
                       color: Colors.grey),
                 );
               }
@@ -220,91 +218,94 @@ class _OtpScreenState extends State<OtpScreen>
     return Scaffold(
         body: Container(
       width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       decoration: StylePage().background,
       child: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'iSmartLogin',
-                      style: TextStyle(
-                          fontFamily: FontStyles().FontFamily,
-                          fontSize: 46,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SignUpScreen(),
-                          ),
-                        );
-                      },
-                      child: FaIcon(
-                        FontAwesomeIcons.times,
-                        color: Colors.white,
-                        size: 26,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SingleChildScrollView(
-                child: Container(
-                  padding:
-                      EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 20),
-                  width: WidhtDevice().widht(context),
-                  decoration: StylePage().boxWhite,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 15),
-                          alignment: Alignment.center,
-                          width: 100,
-                          height: 100,
-                          decoration: new BoxDecoration(
-                            color: Color(0xFF18C0FF),
-                            shape: BoxShape.circle,
-                          ),
-                          child: FaIcon(
-                            FontAwesomeIcons.shieldAlt,
-                            size: 60,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'iSmartLogin',
+                        style: TextStyle(
+                            fontFamily: FontStyles().FontFamily,
+                            fontSize: 46,
                             color: Colors.white,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SignUpScreen(),
+                            ),
+                          );
+                        },
+                        child: FaIcon(
+                          FontAwesomeIcons.times,
+                          color: Colors.white,
+                          size: 26,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SingleChildScrollView(
+                  child: Container(
+                    padding:
+                        EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 20),
+                    width: WidhtDevice().widht(context),
+                    decoration: StylePage().boxWhite,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 15),
+                            alignment: Alignment.center,
+                            width: 100,
+                            height: 100,
+                            decoration: new BoxDecoration(
+                              color: Color(0xFF18C0FF),
+                              shape: BoxShape.circle,
+                            ),
+                            child: FaIcon(
+                              FontAwesomeIcons.shieldAlt,
+                              size: 60,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.only(left: 15, right: 15, top: 20),
-                          child: Text(
-                            'กรุณากรอก One Time Password หรือ OTP ที่ส่งไปยัง ${_items['PHONE']} ของคุณ',
-                            style: TextStyle(
-                                fontFamily: FontStyles().FontFamily,
-                                fontSize: 24,
-                                height: 1),
-                            textAlign: TextAlign.center,
+                          Container(
+                            padding:
+                                EdgeInsets.only(left: 15, right: 15, top: 20),
+                            child: Text(
+                              'กรุณากรอก One Time Password หรือ OTP ที่ส่งไปยัง ${_items['PHONE']} ของคุณ',
+                              style: TextStyle(
+                                  fontFamily: FontStyles().FontFamily,
+                                  fontSize: 24,
+                                  height: 1),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.only(top: 40, left: 20, right: 20),
-                          child: formlogin(),
-                        ),
-                      ],
+                          Container(
+                            padding:
+                                EdgeInsets.only(top: 40, left: 20, right: 20),
+                            child: formlogin(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ismart_login/page/front/front_count_widget.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
+import 'package:ismart_login/page/sign/signout_popup.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/system/clock.dart';
@@ -20,6 +21,9 @@ class FrontScreen extends StatefulWidget {
 }
 
 class _FrontScreenState extends State<FrontScreen> {
+  Timer _timer;
+  Timer _date;
+  //---
   List<ItemsMemberList> _items = [];
   String _dateString;
   String _timeString;
@@ -45,11 +49,19 @@ class _FrontScreenState extends State<FrontScreen> {
 
   @override
   void initState() {
+    _getShaerd();
     _timeString = _formatTime(DateTime.now());
-    Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     _dateString = _formatDate(DateTime.now());
-    Timer.periodic(Duration(seconds: 1), (Timer t) => _getDate());
+    _date = Timer.periodic(Duration(seconds: 1), (Timer t) => _getDate());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _date.cancel();
+    super.dispose();
   }
 
   void _getTime() {
@@ -90,7 +102,6 @@ class _FrontScreenState extends State<FrontScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _getShaerd();
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -114,30 +125,35 @@ class _FrontScreenState extends State<FrontScreen> {
                           padding: EdgeInsets.all(15),
                           child: Row(
                             children: [
-                              Container(
-                                margin: EdgeInsets.only(top: 15),
-                                alignment: Alignment.center,
-                                width: 60,
-                                height: 60,
-                                decoration: new BoxDecoration(
-                                  color: Color(0xFFF2F2F2),
-                                  shape: BoxShape.circle,
-                                  border:
-                                      Border.all(color: Colors.white, width: 2),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      spreadRadius: 2,
-                                      blurRadius: 5,
-                                      offset: Offset(
-                                          0, 0), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                  size: 50,
+                              GestureDetector(
+                                onTap: () {
+                                  alert_signout(context);
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 15),
+                                  alignment: Alignment.center,
+                                  width: 60,
+                                  height: 60,
+                                  decoration: new BoxDecoration(
+                                    color: Color(0xFFF2F2F2),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Colors.white, width: 2),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.3),
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
+                                        offset: Offset(
+                                            0, 0), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 50,
+                                  ),
                                 ),
                               ),
                               Expanded(

@@ -59,74 +59,80 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         decoration: StylePage().background,
         child: SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'iSmartLogin',
-                        style: TextStyle(
-                            fontFamily: FontStyles().FontFamily,
-                            fontSize: 46,
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: FaIcon(
-                          FontAwesomeIcons.times,
-                          color: Colors.white,
-                          size: 26,
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'iSmartLogin',
+                          style: TextStyle(
+                              fontFamily: FontStyles().FontFamily,
+                              fontSize: 46,
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal),
                         ),
-                      ),
-                    ],
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: FaIcon(
+                            FontAwesomeIcons.times,
+                            color: Colors.white,
+                            size: 26,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 20),
-                  width: WidhtDevice().widht(context),
-                  decoration: StylePage().boxWhite,
-                  child: Column(
-                    children: [
-                      // Container(
-                      //   margin: EdgeInsets.only(top: 15),
-                      //   alignment: Alignment.center,
-                      //   width: 100,
-                      //   height: 100,
-                      //   decoration: new BoxDecoration(
-                      //     color: Color(0xFF18C0FF),
-                      //     shape: BoxShape.circle,
-                      //   ),
-                      //   child: Icon(
-                      //     Icons.person,
-                      //     color: Colors.white,
-                      //     size: 75,
-                      //   ),
-                      // ),
-                      // Text(
-                      //   'ลงทะเบียน',
-                      //   style: TextStyle(
-                      //       fontFamily: FontStyles().FontFamily, fontSize: 46),
-                      // ),
-                      Container(
-                        padding: EdgeInsets.only(top: 40, left: 20, right: 20),
-                        child: formlogin(),
+                  SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          left: 5, right: 5, top: 10, bottom: 20),
+                      width: WidhtDevice().widht(context),
+                      decoration: StylePage().boxWhite,
+                      child: Column(
+                        children: [
+                          // Container(
+                          //   margin: EdgeInsets.only(top: 15),
+                          //   alignment: Alignment.center,
+                          //   width: 100,
+                          //   height: 100,
+                          //   decoration: new BoxDecoration(
+                          //     color: Color(0xFF18C0FF),
+                          //     shape: BoxShape.circle,
+                          //   ),
+                          //   child: Icon(
+                          //     Icons.person,
+                          //     color: Colors.white,
+                          //     size: 75,
+                          //   ),
+                          // ),
+                          // Text(
+                          //   'ลงทะเบียน',
+                          //   style: TextStyle(
+                          //       fontFamily: FontStyles().FontFamily, fontSize: 46),
+                          // ),
+                          Container(
+                            padding:
+                                EdgeInsets.only(top: 40, left: 20, right: 20),
+                            child: formlogin(),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -202,6 +208,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: SizedBox(
                   child: TextFormField(
                     controller: _inputName,
+                    keyboardType: TextInputType.name,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
@@ -209,16 +216,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return null;
                     },
                     style: TextStyle(
-                        fontFamily: FontStyles().FontFamily,
-                        fontSize: 24,
-                        height: 0.7),
+                      fontFamily: FontStyles().FontFamily,
+                      fontSize: 24,
+                    ),
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: 'ชื่อ',
-                      labelStyle: TextStyle(
-                          fontFamily: FontStyles().FontThaiSans,
-                          fontSize: 24,
-                          height: 0),
+                      hintText: 'ชื่อ',
+                      hintStyle: TextStyle(
+                        fontFamily: FontStyles().FontThaiSans,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
                 ),
@@ -229,6 +236,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Expanded(
                 child: SizedBox(
                   child: TextFormField(
+                    keyboardType: TextInputType.name,
                     controller: _inputLastname,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -237,17 +245,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return null;
                     },
                     style: TextStyle(
-                        fontFamily: FontStyles().FontFamily,
-                        fontSize: 24,
-                        height: 0.7),
+                      fontFamily: FontStyles().FontFamily,
+                      fontSize: 24,
+                    ),
                     decoration: InputDecoration(
-                      alignLabelWithHint: true,
-                      labelText: 'นามสกุล',
-                      labelStyle: TextStyle(
+                        alignLabelWithHint: true,
+                        hintText: 'นามสกุล',
+                        hintStyle: TextStyle(
                           fontFamily: FontStyles().FontThaiSans,
                           fontSize: 24,
-                          height: 0),
-                    ),
+                        )),
                   ),
                 ),
               ),
@@ -265,17 +272,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 }
                 return null;
               },
+              keyboardType: TextInputType.phone,
               style: TextStyle(
-                  fontFamily: FontStyles().FontFamily,
-                  fontSize: 24,
-                  height: 0.7),
+                fontFamily: FontStyles().FontFamily,
+                fontSize: 24,
+              ),
               decoration: InputDecoration(
                 alignLabelWithHint: true,
-                labelText: 'เบอร์โทรศัพท์',
-                labelStyle: TextStyle(
-                    fontFamily: FontStyles().FontThaiSans,
-                    fontSize: 24,
-                    height: 0),
+                hintText: 'เบอร์โทรศัพท์',
+                hintStyle: TextStyle(
+                    fontFamily: FontStyles().FontThaiSans, fontSize: 24),
               ),
             ),
           ),
@@ -285,6 +291,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SizedBox(
             child: TextFormField(
               controller: _inputPassword,
+              keyboardType: TextInputType.visiblePassword,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';
@@ -293,16 +300,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
               obscureText: true,
               style: TextStyle(
-                  fontFamily: FontStyles().FontFamily,
-                  fontSize: 24,
-                  height: 0.7),
+                fontFamily: FontStyles().FontFamily,
+                fontSize: 24,
+              ),
               decoration: InputDecoration(
                 alignLabelWithHint: true,
-                labelText: 'รหัสผ่าน',
-                labelStyle: TextStyle(
-                    fontFamily: FontStyles().FontThaiSans,
-                    fontSize: 24,
-                    height: 0),
+                hintText: 'รหัสผ่าน',
+                hintStyle: TextStyle(
+                    fontFamily: FontStyles().FontThaiSans, fontSize: 24),
               ),
             ),
           ),
@@ -312,6 +317,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SizedBox(
             child: TextFormField(
               controller: _inputRePassword,
+              keyboardType: TextInputType.visiblePassword,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';
@@ -325,16 +331,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
               obscureText: true,
               style: TextStyle(
-                  fontFamily: FontStyles().FontFamily,
-                  fontSize: 24,
-                  height: 0.7),
+                fontFamily: FontStyles().FontFamily,
+                fontSize: 24,
+              ),
               decoration: InputDecoration(
                 alignLabelWithHint: true,
-                labelText: 'ยืนยันรหัสผ่าน',
-                labelStyle: TextStyle(
-                    fontFamily: FontStyles().FontThaiSans,
-                    fontSize: 24,
-                    height: 0),
+                hintText: 'ยืนยันรหัสผ่าน',
+                hintStyle: TextStyle(
+                    fontFamily: FontStyles().FontThaiSans, fontSize: 24),
               ),
             ),
           ),
@@ -361,7 +365,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style: TextStyle(
                           fontFamily: FontStyles().FontFamily,
                           color: Colors.black,
-                          fontSize: 36),
+                          fontSize: 26),
                     ),
                   ),
                 ),
@@ -394,7 +398,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style: TextStyle(
                           fontFamily: FontStyles().FontFamily,
                           color: Colors.white,
-                          fontSize: 36),
+                          fontSize: 26),
                     ),
                   ),
                 ),
