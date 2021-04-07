@@ -40,4 +40,9 @@ class Clock {
   String formatDate(DateTime dateTime) {
     return DateFormat('d-M-y').format(dateTime);
   }
+
+  String convertTime({String time}) {
+    List lists = time.split(":");
+    return lists[0] + '.' + lists[1];
+  }
 }

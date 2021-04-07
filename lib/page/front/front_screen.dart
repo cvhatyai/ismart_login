@@ -6,6 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ismart_login/page/front/front_count_widget.dart';
+import 'package:ismart_login/page/front/future/org_future.dart';
+import 'package:ismart_login/page/front/model/orglist.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/page/sign/signout_popup.dart';
 import 'package:ismart_login/style/font_style.dart';
@@ -64,6 +66,20 @@ class _FrontScreenState extends State<FrontScreen> {
     super.dispose();
   }
 
+  // --- Post Data Member
+  List<ItemsOrgList> _resultOrg = [];
+  Future<bool> onLoadSelectOrganization(Map map) async {
+    await OrgFuture().apiGetOrganization(map).then((onValue) {
+      print(onValue[0].MSG);
+      if (onValue[0].MSG == 'success') {
+        _resultOrg = onValue[0].RESULT;
+        print(_resultOrg.length);
+      }
+    });
+    setState(() {});
+    return true;
+  }
+
   void _getTime() {
     final DateTime now = DateTime.now();
     final String formattedDateTime = _formatTime(now);
@@ -94,6 +110,10 @@ class _FrontScreenState extends State<FrontScreen> {
     String item = prefs.getString('item');
     _items =
         List.from(json.decode(item).map((m) => ItemsMemberList.fromJson(m)));
+    if (_items.length > 0) {
+      Map _map = {"ID": _items[0].ORG_ID != '' ? _items[0].ORG_ID : ''};
+      onLoadSelectOrganization(_map);
+    }
   }
 
   String _formatDate(DateTime dateTime) {
@@ -346,7 +366,13 @@ class _FrontScreenState extends State<FrontScreen> {
                                           style: styleDetailCamera,
                                         ),
                                         Text(
-                                          'เวลาเข้างาน 8.00 น.',
+                                          'เวลาเข้างาน ' +
+                                              Clock().convertTime(
+                                                  time: _resultOrg.length > 0
+                                                      ? _resultOrg[0]
+                                                          .TIME_INSITE
+                                                      : '--:--') +
+                                              ' น.',
                                           style: styleDetailCamera,
                                         ),
                                       ],
@@ -404,7 +430,13 @@ class _FrontScreenState extends State<FrontScreen> {
                                           style: styleDetailCamera,
                                         ),
                                         Text(
-                                          'เวลาออกงาน 8.00 น.',
+                                          'เวลาออกงาน ' +
+                                              Clock().convertTime(
+                                                  time: _resultOrg.length > 0
+                                                      ? _resultOrg[0]
+                                                          .TIME_OUTSITE
+                                                      : '--:--') +
+                                              ' น.',
                                           style: styleDetailCamera,
                                         ),
                                       ],

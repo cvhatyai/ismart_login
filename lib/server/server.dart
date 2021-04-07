@@ -1,16 +1,16 @@
-final String _baseUrl = 'http://check-in.cityvariety.com/';
-final String _apiName = 'app_api_v3/';
-final String pathApi = _baseUrl + _apiName;
+final String _baseUrl = 'http://ismartlogin.cityvariety.com/';
 
 class Server {
   String url = _baseUrl;
   //------------
-  String getApp = pathApi + 'showlist';
+  //
   //--- OTP-----
-  String postOtp = pathApi + 'setOtp';
-  String getCheckOtp = pathApi + 'checkOtp';
+  String postOtp = _baseUrl + 'member/setOtp';
+  String getCheckOtp = _baseUrl + 'member/checkOtp';
   //--- Member -----
-  String postMember = pathApi + 'postMember';
-  String getMember = pathApi + 'getMember';
+  String postMember = _baseUrl + 'member/postMember';
+  String getMember = _baseUrl + 'member/getMember';
+  // ---องค์กร
+  String getOrg = _baseUrl + 'organization/getOrg';
   Server() : super();
 }
