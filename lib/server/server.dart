@@ -12,5 +12,9 @@ class Server {
   String getMember = _baseUrl + 'member/getMember';
   // ---องค์กร
   String getOrg = _baseUrl + 'organization/getOrg';
+
+  //---- สรุป  -- การทำงาน
+  String getSummaryAllDay = _baseUrl + "summary/attendSummaryList";
+  String getSummaryToDay = _baseUrl + "summary/attendDailyList";
   Server() : super();
 }

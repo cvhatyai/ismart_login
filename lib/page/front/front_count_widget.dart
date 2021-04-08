@@ -1,9 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:ismart_login/page/front/future/summary_future.dart';
+import 'package:ismart_login/page/front/model/sumaryAllDay.dart';
+import 'package:ismart_login/page/front/model/sumaryToDay.dart';
+import 'package:ismart_login/page/front/model/sumaryToDay_absence.dart';
+import 'package:ismart_login/page/front/model/sumaryToDay_late.dart';
+import 'package:ismart_login/page/front/model/sumaryToDay_ontime.dart';
 import 'package:ismart_login/style/font_style.dart';
 
 class FrontCountWidget extends StatefulWidget {
+  final String org_id;
+  FrontCountWidget({Key key, @required this.org_id}) : super(key: key);
   @override
   _FrontCountWidgetState createState() => _FrontCountWidgetState();
 }
@@ -11,12 +20,37 @@ class FrontCountWidget extends StatefulWidget {
 class _FrontCountWidgetState extends State<FrontCountWidget> {
   TextStyle styleLabel =
       TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 16, height: 1);
+  //---
+  var newFormat = DateFormat("yyyy-MM-dd");
 
+  ///----
   @override
   void initState() {
-    // TODO: implement initState
+    Map _map = {
+      "org_id": widget.org_id,
+      "create_date": newFormat.format(DateTime.now())
+    };
+    onLoadGetSummaryToDay(_map);
     super.initState();
-    // Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
+  }
+
+  // --- Post Data Member
+  List<ItemsSummaryToDay> _result = [];
+  List<ItemsSummaryToDay_Ontime> _result_ontime = [];
+  List<ItemsSummaryToDay_Late> _result_late = [];
+  List<ItemsSummaryToDay_Absence> _result_absence = [];
+  Future<bool> onLoadGetSummaryToDay(Map map) async {
+    await SummaryFuture().apiGetSummaryToDay(map).then((onValue) {
+      _result = onValue;
+      print(_result.length);
+      setState(() {
+        _result_ontime = _result[0].ONTIME;
+        _result_late = _result[0].LATE;
+        _result_absence = _result[0].ABSENCE;
+      });
+    });
+    setState(() {});
+    return true;
   }
 
   @override
@@ -57,7 +91,9 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                             children: [
                               Container(
                                 child: Text(
-                                  '23',
+                                  _result_absence.length > 0
+                                      ? _result_absence.length
+                                      : '0',
                                   style: TextStyle(
                                       fontSize: 40,
                                       fontFamily: FontStyles().FontThaiSans,
@@ -131,7 +167,9 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                             children: [
                               Container(
                                 child: Text(
-                                  '23',
+                                  _result_ontime.length > 0
+                                      ? _result_ontime.length.toString()
+                                      : '0',
                                   style: TextStyle(
                                       fontSize: 40,
                                       fontFamily: FontStyles().FontThaiSans,
@@ -205,7 +243,9 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                             children: [
                               Container(
                                 child: Text(
-                                  '23',
+                                  _result_late.length > 0
+                                      ? _result_late.length.toString()
+                                      : '0',
                                   style: TextStyle(
                                       fontSize: 40,
                                       fontFamily: FontStyles().FontThaiSans,

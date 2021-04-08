@@ -30,6 +30,7 @@ class _FrontScreenState extends State<FrontScreen> {
   String _dateString;
   String _timeString;
   //----
+  String org_id;
   //Setup
   PickedFile _imageFile;
   dynamic _pickImageError;
@@ -55,7 +56,10 @@ class _FrontScreenState extends State<FrontScreen> {
     _timeString = _formatTime(DateTime.now());
     _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     _dateString = _formatDate(DateTime.now());
-    _date = Timer.periodic(Duration(seconds: 1), (Timer t) => _getDate());
+    _date = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      _getShaerd();
+      _getDate();
+    });
     super.initState();
   }
 
@@ -113,6 +117,9 @@ class _FrontScreenState extends State<FrontScreen> {
     if (_items.length > 0) {
       Map _map = {"ID": _items[0].ORG_ID != '' ? _items[0].ORG_ID : ''};
       onLoadSelectOrganization(_map);
+      setState(() {
+        org_id = _items[0].ORG_ID;
+      });
     }
   }
 
@@ -275,7 +282,9 @@ class _FrontScreenState extends State<FrontScreen> {
                             ],
                           ),
                         ),
-                        FrontCountWidget(),
+                        FrontCountWidget(
+                          org_id: org_id,
+                        ),
                         Container(
                           padding: EdgeInsets.only(top: 10),
                           alignment: Alignment.center,
