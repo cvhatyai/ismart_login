@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ismart_login/page/sign/signin_screen.dart';
 import 'package:ismart_login/page/splashscreen/splashscreen_screen.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 void main() {
   runApp(MyApp());

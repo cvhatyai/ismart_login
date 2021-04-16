@@ -2,6 +2,7 @@ import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ismart_login/page/front/front_screen.dart';
+import 'package:ismart_login/page/history/history_screen.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/style/font_style.dart';
 
@@ -19,9 +20,7 @@ class _MainPageState extends State<MainPage> {
       'Index 0: Home',
     ),
     FrontScreen(),
-    Text(
-      'Index 2: School',
-    ),
+    HistoryScreen(),
   ];
 
   @override

@@ -1,20 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ismart_login/page/front/front_count_widget.dart';
 import 'package:ismart_login/page/front/future/org_future.dart';
+import 'package:ismart_login/page/front/insite_popup.dart';
 import 'package:ismart_login/page/front/model/orglist.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/page/sign/signout_popup.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/system/clock.dart';
-import 'package:ismart_login/system/shared_preferences.dart';
+import 'package:ismart_login/system/gps.dart';
 import 'package:ismart_login/system/widht_device.dart';
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FrontScreen extends StatefulWidget {
@@ -23,6 +27,10 @@ class FrontScreen extends StatefulWidget {
 }
 
 class _FrontScreenState extends State<FrontScreen> {
+  String myLat;
+  String myLong;
+  //---
+
   Timer _timer;
   Timer _date;
   //---
@@ -52,14 +60,13 @@ class _FrontScreenState extends State<FrontScreen> {
 
   @override
   void initState() {
+    _getMyLocation();
     _getShaerd();
     _timeString = _formatTime(DateTime.now());
     _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     _dateString = _formatDate(DateTime.now());
-    _date = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      _getShaerd();
-      _getDate();
-    });
+    _date = Timer.periodic(Duration(seconds: 1), (Timer t) => _getDate());
+
     super.initState();
   }
 
@@ -77,7 +84,6 @@ class _FrontScreenState extends State<FrontScreen> {
       print(onValue[0].MSG);
       if (onValue[0].MSG == 'success') {
         _resultOrg = onValue[0].RESULT;
-        print(_resultOrg.length);
       }
     });
     setState(() {});
@@ -115,12 +121,25 @@ class _FrontScreenState extends State<FrontScreen> {
     _items =
         List.from(json.decode(item).map((m) => ItemsMemberList.fromJson(m)));
     if (_items.length > 0) {
-      Map _map = {"ID": _items[0].ORG_ID != '' ? _items[0].ORG_ID : ''};
-      onLoadSelectOrganization(_map);
       setState(() {
         org_id = _items[0].ORG_ID;
       });
+      Map _map = {"ID": _items[0].ORG_ID != '' ? _items[0].ORG_ID : ''};
+      onLoadSelectOrganization(_map);
     }
+  }
+
+  _getMyLocation() {
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      latitude = currentLocation.latitude.toDouble();
+      longitude = currentLocation.longitude.toDouble();
+    });
+    setState(() {
+      myLat = latitude.toString();
+      myLong = longitude.toString();
+    });
+    print("==> " + myLat + "," + myLong);
+    // List _list = myLocation.split(",");
   }
 
   String _formatDate(DateTime dateTime) {
@@ -282,9 +301,7 @@ class _FrontScreenState extends State<FrontScreen> {
                             ],
                           ),
                         ),
-                        FrontCountWidget(
-                          org_id: org_id,
-                        ),
+                        FrontCountWidget(),
                         Container(
                           padding: EdgeInsets.only(top: 10),
                           alignment: Alignment.center,
@@ -324,7 +341,7 @@ class _FrontScreenState extends State<FrontScreen> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    _imgFromCamera();
+                                    _imgFromCamera_in(context);
                                   },
                                   child: Container(
                                     padding: EdgeInsets.only(bottom: 5),
@@ -392,7 +409,7 @@ class _FrontScreenState extends State<FrontScreen> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    _imgFromCamera();
+                                    _imgFromCamera_out();
                                   },
                                   child: Container(
                                     padding: EdgeInsets.only(bottom: 5),
@@ -562,7 +579,29 @@ class _FrontScreenState extends State<FrontScreen> {
     );
   }
 
-  _imgFromCamera() async {
+  _imgFromCamera_in(BuildContext context) async {
+    try {
+      final pickedFile = await ImagePicker().getImage(
+        source: ImageSource.camera,
+        imageQuality: 50,
+      );
+      setState(() {
+        _imageFile = pickedFile;
+      });
+      alert_insite(
+          context: context,
+          pathImage: pickedFile.path,
+          lat: _resultOrg[0].LATITUDE,
+          long: _resultOrg[0].LONGITUDE);
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+        print(_pickImageError.toString());
+      });
+    }
+  }
+
+  _imgFromCamera_out() async {
     try {
       final pickedFile = await ImagePicker().getImage(
         source: ImageSource.camera,

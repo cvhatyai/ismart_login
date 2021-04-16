@@ -6,6 +6,7 @@ import 'package:ismart_login/page/sign/future/singin_future.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/page/sign/model/memberresult.dart';
 import 'package:ismart_login/page/sign/signin_screen.dart';
+import 'package:ismart_login/system/gps.dart';
 import 'package:ismart_login/system/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
@@ -60,6 +61,7 @@ class _SplashscreenScreenState extends State<SplashscreenScreen> {
   @override
   void initState() {
     _controllerLoginAuto();
+    LocationService.checkService();
     super.initState();
   }
 

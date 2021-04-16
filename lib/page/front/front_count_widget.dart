@@ -9,10 +9,9 @@ import 'package:ismart_login/page/front/model/sumaryToDay_absence.dart';
 import 'package:ismart_login/page/front/model/sumaryToDay_late.dart';
 import 'package:ismart_login/page/front/model/sumaryToDay_ontime.dart';
 import 'package:ismart_login/style/font_style.dart';
+import 'package:ismart_login/system/shared_preferences.dart';
 
 class FrontCountWidget extends StatefulWidget {
-  final String org_id;
-  FrontCountWidget({Key key, @required this.org_id}) : super(key: key);
   @override
   _FrontCountWidgetState createState() => _FrontCountWidgetState();
 }
@@ -24,13 +23,17 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
   var newFormat = DateFormat("yyyy-MM-dd");
 
   ///----
-  @override
-  void initState() {
+  _function() async {
     Map _map = {
-      "org_id": widget.org_id,
+      "org_id": await SharedCashe.getItemsWay(name: 'org_id'),
       "create_date": newFormat.format(DateTime.now())
     };
     onLoadGetSummaryToDay(_map);
+  }
+
+  @override
+  void initState() {
+    _function();
     super.initState();
   }
 
@@ -92,7 +95,7 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                               Container(
                                 child: Text(
                                   _result_absence.length > 0
-                                      ? _result_absence.length
+                                      ? _result_absence.length.toString()
                                       : '0',
                                   style: TextStyle(
                                       fontSize: 40,
@@ -315,7 +318,7 @@ class _FrontCountWidgetState extends State<FrontCountWidget> {
                             children: [
                               Container(
                                 child: Text(
-                                  '23',
+                                  '0',
                                   style: TextStyle(
                                       fontSize: 40,
                                       fontFamily: FontStyles().FontThaiSans,
