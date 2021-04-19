@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ismart_login/page/front/front_count_widget.dart';
+import 'package:ismart_login/page/front/future/attend_future.dart';
 import 'package:ismart_login/page/front/future/org_future.dart';
+import 'package:ismart_login/page/front/history_day_widget.dart';
 import 'package:ismart_login/page/front/insite_popup.dart';
+import 'package:ismart_login/page/front/model/attandToDay.dart';
 import 'package:ismart_login/page/front/model/orglist.dart';
+import 'package:ismart_login/page/front/offside_popup.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/page/sign/signout_popup.dart';
 import 'package:ismart_login/style/font_style.dart';
@@ -27,12 +28,19 @@ class FrontScreen extends StatefulWidget {
 }
 
 class _FrontScreenState extends State<FrontScreen> {
-  String myLat;
-  String myLong;
+  List sortTimeOthers = [
+    'สาย',
+    'ลาไม่เต็มวัน',
+    'ลืมลงชื่อเข้างาน',
+    'ทำงานนอกสถานที่'
+  ];
+  int currentIndex = 0;
+  TextEditingController _inputNote = TextEditingController();
   //---
 
   Timer _timer;
   Timer _date;
+  Timer _re;
   //---
   List<ItemsMemberList> _items = [];
   String _dateString;
@@ -42,6 +50,9 @@ class _FrontScreenState extends State<FrontScreen> {
   //Setup
   PickedFile _imageFile;
   dynamic _pickImageError;
+  //-----
+  bool _login = false;
+  bool _logout = false;
   //-----
   TextStyle styleTime = TextStyle(
       fontFamily: FontStyles().FontFamily, fontSize: 24, color: Colors.white);
@@ -60,13 +71,11 @@ class _FrontScreenState extends State<FrontScreen> {
 
   @override
   void initState() {
-    _getMyLocation();
     _getShaerd();
     _timeString = _formatTime(DateTime.now());
     _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     _dateString = _formatDate(DateTime.now());
     _date = Timer.periodic(Duration(seconds: 1), (Timer t) => _getDate());
-
     super.initState();
   }
 
@@ -74,6 +83,7 @@ class _FrontScreenState extends State<FrontScreen> {
   void dispose() {
     _timer.cancel();
     _date.cancel();
+    _re.cancel();
     super.dispose();
   }
 
@@ -84,6 +94,32 @@ class _FrontScreenState extends State<FrontScreen> {
       print(onValue[0].MSG);
       if (onValue[0].MSG == 'success') {
         _resultOrg = onValue[0].RESULT;
+        onLoadAttend();
+      }
+    });
+    setState(() {});
+    return true;
+  }
+
+  // --- Post Data Member
+  List<ItemsAttandToDay> _resultAttand = [];
+  Future<bool> onLoadAttend() async {
+    Map map = {"uid": _items.length > 0 ? _items[0].ID : ''};
+    await AttandFuture().apiGetAttandCheck(map).then((onValue) {
+      if (onValue[0].STATUS != 'success') {
+        setState(() {
+          _login = true;
+          _logout = false;
+        });
+      } else {
+        setState(() {
+          _resultAttand = onValue;
+          if (_resultAttand[0].END_TIME == null && !_login) {
+            _logout = true;
+          } else {
+            _logout = false;
+          }
+        });
       }
     });
     setState(() {});
@@ -99,7 +135,7 @@ class _FrontScreenState extends State<FrontScreen> {
   }
 
   String _formatTime(DateTime dateTime) {
-    return DateFormat('HH.mm').format(dateTime);
+    return DateFormat('HH:mm').format(dateTime);
   }
 
   void _getDate() {
@@ -127,19 +163,6 @@ class _FrontScreenState extends State<FrontScreen> {
       Map _map = {"ID": _items[0].ORG_ID != '' ? _items[0].ORG_ID : ''};
       onLoadSelectOrganization(_map);
     }
-  }
-
-  _getMyLocation() {
-    location.onLocationChanged.listen((LocationData currentLocation) {
-      latitude = currentLocation.latitude.toDouble();
-      longitude = currentLocation.longitude.toDouble();
-    });
-    setState(() {
-      myLat = latitude.toString();
-      myLong = longitude.toString();
-    });
-    print("==> " + myLat + "," + myLong);
-    // List _list = myLocation.split(",");
   }
 
   String _formatDate(DateTime dateTime) {
@@ -341,7 +364,9 @@ class _FrontScreenState extends State<FrontScreen> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    _imgFromCamera_in(context);
+                                    if (_login) {
+                                      _imgFromCamera_in(context);
+                                    }
                                   },
                                   child: Container(
                                     padding: EdgeInsets.only(bottom: 5),
@@ -364,16 +389,22 @@ class _FrontScreenState extends State<FrontScreen> {
                                           width: 120,
                                           height: 120,
                                           decoration: BoxDecoration(
-                                              color: Color(0xFFD6F5FF),
+                                              color: !_login
+                                                  ? Colors.grey[100]
+                                                  : Color(0xFFD6F5FF),
                                               shape: BoxShape.circle),
                                           child: Container(
                                             padding: EdgeInsets.all(10),
                                             decoration: BoxDecoration(
-                                                color: Color(0xFFA7E9FF),
+                                                color: !_login
+                                                    ? Colors.grey[300]
+                                                    : Color(0xFFA7E9FF),
                                                 shape: BoxShape.circle),
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                  color: Color(0xFF36C8FF),
+                                                  color: !_login
+                                                      ? Colors.grey[400]
+                                                      : Color(0xFF36C8FF),
                                                   shape: BoxShape.circle),
                                               child: Icon(
                                                 Icons.camera_alt,
@@ -409,7 +440,9 @@ class _FrontScreenState extends State<FrontScreen> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    _imgFromCamera_out();
+                                    if (_logout) {
+                                      _imgFromCamera_out(context);
+                                    }
                                   },
                                   child: Container(
                                     padding: EdgeInsets.only(bottom: 5),
@@ -428,16 +461,22 @@ class _FrontScreenState extends State<FrontScreen> {
                                           width: 120,
                                           height: 120,
                                           decoration: BoxDecoration(
-                                              color: Color(0xFFFFEDCE),
+                                              color: !_logout
+                                                  ? Colors.grey[100]
+                                                  : Color(0xFFFFEDCE),
                                               shape: BoxShape.circle),
                                           child: Container(
                                             padding: EdgeInsets.all(10),
                                             decoration: BoxDecoration(
-                                                color: Color(0xFFFAD7A0),
+                                                color: !_logout
+                                                    ? Colors.grey[300]
+                                                    : Color(0xFFFAD7A0),
                                                 shape: BoxShape.circle),
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                  color: Color(0xFFFFAF36),
+                                                  color: !_logout
+                                                      ? Colors.grey[400]
+                                                      : Color(0xFFFFAF36),
                                                   shape: BoxShape.circle),
                                               child: Icon(
                                                 Icons.camera_alt,
@@ -487,44 +526,7 @@ class _FrontScreenState extends State<FrontScreen> {
                                     height: 1,
                                     fontWeight: FontWeight.bold),
                               ),
-                              Container(
-                                padding: EdgeInsets.only(top: 6),
-                                child: ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: 5,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Container(
-                                        alignment: Alignment.centerLeft,
-                                        margin: EdgeInsets.only(bottom: 6),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 15,
-                                              height: 15,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xFF36C8FF),
-                                                  shape: BoxShape.circle),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                  padding:
-                                                      EdgeInsets.only(left: 5),
-                                                  child: Text(
-                                                    'เข้างาน เมื่อเวลา 7.45 น.',
-                                                    style: TextStyle(
-                                                        fontFamily: FontStyles()
-                                                            .FontFamily,
-                                                        fontSize: 20,
-                                                        height: 1),
-                                                  )),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              ),
+                              HistoryDayWidget(),
                             ],
                           ),
                         ),
@@ -588,11 +590,23 @@ class _FrontScreenState extends State<FrontScreen> {
       setState(() {
         _imageFile = pickedFile;
       });
-      alert_insite(
+      location.onLocationChanged.listen((LocationData currentLocation) {
+        latitude = currentLocation.latitude.toDouble();
+        longitude = currentLocation.longitude.toDouble();
+      });
+      showDialog(
           context: context,
-          pathImage: pickedFile.path,
-          lat: _resultOrg[0].LATITUDE,
-          long: _resultOrg[0].LONGITUDE);
+          builder: (_) {
+            return InsiteDialog(
+              uid: _items[0].ID,
+              pathImage: pickedFile.path,
+              lat: _resultOrg[0].LATITUDE,
+              long: _resultOrg[0].LONGITUDE,
+              time: _resultOrg[0].TIME_INSITE,
+              myLat: latitude,
+              myLng: longitude,
+            );
+          });
     } catch (e) {
       setState(() {
         _pickImageError = e;
@@ -601,7 +615,7 @@ class _FrontScreenState extends State<FrontScreen> {
     }
   }
 
-  _imgFromCamera_out() async {
+  _imgFromCamera_out(BuildContext context) async {
     try {
       final pickedFile = await ImagePicker().getImage(
         source: ImageSource.camera,
@@ -610,6 +624,23 @@ class _FrontScreenState extends State<FrontScreen> {
       setState(() {
         _imageFile = pickedFile;
       });
+      location.onLocationChanged.listen((LocationData currentLocation) {
+        latitude = currentLocation.latitude.toDouble();
+        longitude = currentLocation.longitude.toDouble();
+      });
+      showDialog(
+          context: context,
+          builder: (_) {
+            return OffsideDialog(
+              uid: _items[0].ID,
+              pathImage: pickedFile.path,
+              lat: _resultOrg[0].LATITUDE,
+              long: _resultOrg[0].LONGITUDE,
+              time: _resultOrg[0].TIME_OUTSITE,
+              myLat: latitude,
+              myLng: longitude,
+            );
+          });
     } catch (e) {
       setState(() {
         _pickImageError = e;

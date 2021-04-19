@@ -23,7 +23,7 @@ class Clock {
   }
 
   String formatTime(DateTime dateTime) {
-    return DateFormat('HH.mm').format(dateTime);
+    return DateFormat('HH:mm').format(dateTime);
   }
 
   getDateTH() {
@@ -43,6 +43,11 @@ class Clock {
 
   String convertTime({String time}) {
     List lists = time.split(":");
-    return lists[0] + '.' + lists[1];
+    return lists[0] + ':' + lists[1];
+  }
+
+  String onTime() {
+    final DateTime now = DateTime.now();
+    return DateFormat('HH:mm:s').format(now);
   }
 }

@@ -16,7 +16,7 @@ import 'package:ismart_login/system/widht_device.dart';
 Completer<GoogleMapController> _controller = Completer();
 final currentTime = DateTime.now();
 
-class InsiteDialog extends StatefulWidget {
+class OffsideDialog extends StatefulWidget {
   final String uid;
   final String pathImage;
   final String lat;
@@ -24,7 +24,7 @@ class InsiteDialog extends StatefulWidget {
   final String time;
   final double myLat;
   final double myLng;
-  InsiteDialog(
+  OffsideDialog(
       {Key key,
       @required this.uid,
       this.pathImage,
@@ -35,21 +35,16 @@ class InsiteDialog extends StatefulWidget {
       this.myLng})
       : super(key: key);
   @override
-  _InsiteDialogState createState() => _InsiteDialogState();
+  _OffsideDialogState createState() => _OffsideDialogState();
 }
 
-class _InsiteDialogState extends State<InsiteDialog> {
+class _OffsideDialogState extends State<OffsideDialog> {
   double myLat = 0.0;
   double myLong = 0.0;
   double setLat = 0.0;
   double setLong = 0.0;
   double totalDistance = 0;
-  List sortTimeOthers = [
-    'สาย',
-    'ลาไม่เต็มวัน',
-    'ลืมลงชื่อเข้างาน',
-    'ทำงานนอกสถานที่'
-  ];
+  List sortTimeOthers = ['ลาไม่เต็มวัน', 'ทำงานนอกสถานที่'];
   int currentIndex = 0;
   TextEditingController _inputNote = TextEditingController();
   //----
@@ -87,7 +82,7 @@ class _InsiteDialogState extends State<InsiteDialog> {
     DateTime timeInsite = DateFormat("HH:mm").parse(time);
     String insiteNow = DateFormat("HH:mm").format(now);
     DateTime timeNow = DateFormat("HH:mm").parse(insiteNow);
-    if (timeNow.isBefore(timeInsite)) {
+    if (timeNow.isAfter(timeInsite)) {
       return true;
     } else {
       return false;
@@ -98,15 +93,15 @@ class _InsiteDialogState extends State<InsiteDialog> {
   /// ---- Servere---
   List<ItemsAttandStartResult> _resultAttand = [];
   Future<bool> onLoadAttandStart(Map map) async {
-    await AttandFuture().apiPostAttandStart(map).then((onValue) {
-      print(onValue[0].STATUS);
-      print(onValue[0].MSG);
-      if (onValue[0].STATUS == 'success') {
-        _resultAttand = onValue;
-        onUploadFiles();
-      }
-    });
-    return true;
+    // await AttandFuture().apiPostAttandStart(map).then((onValue) {
+    //   print(onValue[0].STATUS);
+    //   print(onValue[0].MSG);
+    //   if (onValue[0].STATUS == 'success') {
+    //     _resultAttand = onValue;
+    //     onUploadFiles();
+    //   }
+    // });
+    // return true;
   }
 
   Future<dynamic> onUploadFiles() async {

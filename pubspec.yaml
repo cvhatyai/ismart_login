@@ -34,10 +34,14 @@ dependencies:
   flutter_qr_reader: ^1.0.5
   app_settings: 4.1.0
   stacked_services:
+  dio: ^4.0.0
+  flutter_easyloading: ^3.0.0
   #-- GPS
   location:
   google_maps_flutter: any
   google_maps_flutter_web: any
+  geolocator: ^7.0.3
+  google_place: ^0.4.0
   flutter:
     sdk: flutter
 

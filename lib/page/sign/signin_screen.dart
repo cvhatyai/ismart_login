@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ismart_login/page/front/front_screen.dart';
@@ -24,6 +25,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   TextEditingController _inputUsername = TextEditingController();
   TextEditingController _inputPassword = TextEditingController();
+  FocusNode _focusUsername = FocusNode();
+  FocusNode _focusPassword = FocusNode();
   //--- Map get Value
   _postDataInput() {
     Map _map = {
@@ -37,9 +40,11 @@ class _SignInScreenState extends State<SignInScreen> {
   //--API
   List<ItemsMemberResult> _result = [];
   Future<bool> onLoadInsertMember(Map map) async {
+    EasyLoading.show();
     await new SigninFuture().apiSelectMember(map).then((onValue) {
       print(onValue[0]['msg']);
       if (onValue[0]['msg'] == 'success') {
+        EasyLoading.dismiss();
         SharedCashe.saveItemsMemberList(item: onValue[0]['result']);
         Navigator.push(
           context,
@@ -47,6 +52,9 @@ class _SignInScreenState extends State<SignInScreen> {
             builder: (context) => MainPage(),
           ),
         );
+      } else {
+        EasyLoading.dismiss();
+        alert_non_signin(context);
       }
     });
     setState(() {});
@@ -60,6 +68,7 @@ class _SignInScreenState extends State<SignInScreen> {
         children: [
           TextFormField(
             controller: _inputUsername,
+            focusNode: _focusUsername,
             keyboardType: TextInputType.number,
             style: TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 24),
             decoration: InputDecoration(
@@ -77,6 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           TextFormField(
             controller: _inputPassword,
+            focusNode: _focusPassword,
             obscureText: true,
             keyboardType: TextInputType.visiblePassword,
             style: TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 24),
@@ -279,6 +289,72 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  alert_non_signin(BuildContext context) async {
+    return showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+          content: Container(
+            width: WidhtDevice().widht(context),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding:
+                      EdgeInsets.only(top: 10, bottom: 10, left: 3, right: 3),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Username หรือ Password \nของคุณไม่ถูกต้อง',
+                    style: TextStyle(
+                        fontFamily: FontStyles().FontFamily,
+                        fontSize: 24,
+                        height: 1),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0),
+                              ),
+                            ),
+                            height: 50,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ปิด',
+                              style: TextStyle(
+                                  fontFamily: FontStyles().FontFamily,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

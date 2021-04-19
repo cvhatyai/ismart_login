@@ -16,5 +16,9 @@ class Server {
   //---- สรุป  -- การทำงาน
   String getSummaryAllDay = _baseUrl + "summary/attendSummaryList";
   String getSummaryToDay = _baseUrl + "summary/attendDailyList";
+  //----- Login Logout
+  String getAttandCheck = _baseUrl + "attend";
+  String postAttandStart = _baseUrl + "attend/attendStart";
+  String postAttandUploadImages = _baseUrl + "attend/appUploadFile";
   Server() : super();
 }
