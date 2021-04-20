@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:ismart_login/page/front/model/attandStart.dart';
-import 'package:ismart_login/page/front/model/attandToDay.dart';
+import 'package:ismart_login/page/front/model/attendEnd.dart';
+import 'package:ismart_login/page/front/model/attendHistory.dart';
+import 'package:ismart_login/page/front/model/attendStart.dart';
+import 'package:ismart_login/page/front/model/attendToDay.dart';
 
 import 'package:ismart_login/server/server.dart';
 
@@ -53,6 +55,24 @@ class AttandFuture {
     }
   }
 
+  Future<List<ItemsAttendEndResult>> apiPostAttendEnd(Map jsonMap) async {
+    //encode Map to JSON
+    var body = json.encode(jsonMap);
+    final response = await http.post(
+      Uri.parse(Server().postAttandEnd),
+      headers: header,
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      List responseJson = json.decode(response.body);
+      return responseJson
+          .map((m) => new ItemsAttendEndResult.fromJson(m))
+          .toList();
+    } else {
+      print('Something went wrong. \nResponse Code : ${response.statusCode}');
+    }
+  }
+
   ///---UPLOAD
   Future<dynamic> uploadAttend(
       {File file,
@@ -71,5 +91,25 @@ class AttandFuture {
     Response response =
         await Dio().post(Server().postAttandUploadImages, data: formData);
     print(json.encode(response.data));
+  }
+
+  //----------------
+  //-----------------
+  Future<List<ItemsAttendHistory>> apiGetAttendHistory(Map jsonMap) async {
+    //encode Map to JSON
+    var body = json.encode(jsonMap);
+    final response = await http.post(
+      Uri.parse(Server().getAttandHistory),
+      headers: header,
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      List responseJson = json.decode(response.body);
+      return responseJson
+          .map((m) => new ItemsAttendHistory.fromJson(m))
+          .toList();
+    } else {
+      print('Something went wrong. \nResponse Code : ${response.statusCode}');
+    }
   }
 }

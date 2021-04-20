@@ -6,7 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:ismart_login/page/front/future/attend_future.dart';
-import 'package:ismart_login/page/front/model/attandStart.dart';
+import 'package:ismart_login/page/front/model/attendEnd.dart';
+import 'package:ismart_login/page/front/model/attendStart.dart';
 import 'package:ismart_login/page/front/outside_popup.dart';
 import 'package:ismart_login/page/main.dart';
 import 'package:ismart_login/style/font_style.dart';
@@ -91,17 +92,17 @@ class _OffsideDialogState extends State<OffsideDialog> {
 
   //---
   /// ---- Servere---
-  List<ItemsAttandStartResult> _resultAttand = [];
-  Future<bool> onLoadAttandStart(Map map) async {
-    // await AttandFuture().apiPostAttandStart(map).then((onValue) {
-    //   print(onValue[0].STATUS);
-    //   print(onValue[0].MSG);
-    //   if (onValue[0].STATUS == 'success') {
-    //     _resultAttand = onValue;
-    //     onUploadFiles();
-    //   }
-    // });
-    // return true;
+  List<ItemsAttendEndResult> _resultAttand = [];
+  Future<bool> onLoadAttandEnd(Map map) async {
+    await AttandFuture().apiPostAttendEnd(map).then((onValue) {
+      print(onValue[0].STATUS);
+      print(onValue[0].MSG);
+      if (onValue[0].STATUS == 'success') {
+        _resultAttand = onValue;
+        onUploadFiles();
+      }
+    });
+    return true;
   }
 
   Future<dynamic> onUploadFiles() async {
@@ -110,7 +111,7 @@ class _OffsideDialogState extends State<OffsideDialog> {
       cmd: 'attend',
       uid: widget.uid,
       uploadKey: _resultAttand[0].UPLOADKEY,
-      attact_type: 'i_start',
+      attact_type: 'i_end',
     );
     return true;
   }
@@ -166,7 +167,7 @@ class _OffsideDialogState extends State<OffsideDialog> {
                 child: Column(
                   children: [
                     Text(
-                      checkTimr(widget.time) ? '' : 'คุณเข้างานสาย',
+                      checkTimr(widget.time) ? '' : 'ออกงานก่อนเวลา',
                       style: TextStyle(
                         fontFamily: FontStyles().FontFamily,
                         height: 1,
@@ -191,24 +192,24 @@ class _OffsideDialogState extends State<OffsideDialog> {
                             "image": widget.pathImage,
                             "latitude": widget.myLat.toString(),
                             "longitude": widget.myLng.toString(),
-                            "start_status": currentIndex + 1,
-                            "start_note": _inputNote.text,
+                            "end_status": currentIndex + 1,
+                            "end_note": _inputNote.text,
                           };
                           print(_map);
-                          onLoadAttandStart(_map);
+                          onLoadAttandEnd(_map);
 
                           ///---
                           setState(() {});
                           if (!distanc()) {
                             Navigator.pop(context);
-                            showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return OutsideDialog(
-                                      lat: widget.myLat.toString(),
-                                      long: widget.myLng.toString(),
-                                      time: widget.time);
-                                });
+                            // showDialog(
+                            //     context: context,
+                            //     builder: (_) {
+                            //       return OutsideDialog(
+                            //           lat: widget.myLat.toString(),
+                            //           long: widget.myLng.toString(),
+                            //           time: widget.time);
+                            //     });
                           } else {
                             Navigator.pop(context);
                             Navigator.push(
@@ -302,19 +303,15 @@ class _OffsideDialogState extends State<OffsideDialog> {
                     height: 1),
               ),
               onChanged: (val) {
-                _select(val);
-                print(val);
+                setState(() {
+                  currentIndex = val;
+                });
+                print(currentIndex);
               },
             ),
           );
         },
       ),
     );
-  }
-
-  _select(int val) {
-    setState(() {
-      currentIndex = val;
-    });
   }
 }

@@ -15,8 +15,16 @@ final currentTime = DateTime.now();
 class OutsideDialog extends StatefulWidget {
   final String lat;
   final String long;
+  final String mainLat;
+  final String mainLng;
   final String time;
-  OutsideDialog({Key key, @required this.lat, this.long, this.time})
+  OutsideDialog(
+      {Key key,
+      @required this.lat,
+      this.long,
+      this.time,
+      this.mainLat,
+      this.mainLng})
       : super(key: key);
   @override
   _OutsideDialogState createState() => _OutsideDialogState();
@@ -29,6 +37,7 @@ class _OutsideDialogState extends State<OutsideDialog> {
   double setLong = 0.0;
   double totalDistance = 0;
   List _checkboxListTile = ['โปรแกรมระบุตำแหน่งผิดพลาด', 'ทำงานนอกสถานที่'];
+  List<bool> _checkbox = [false, false];
   int currentIndex = 0;
   TextEditingController _inputNote = TextEditingController();
   //----
@@ -59,12 +68,18 @@ class _OutsideDialogState extends State<OutsideDialog> {
     print(widget.lat + "," + widget.long);
     Set<Marker> markers = {};
     markers.add(Marker(
+      markerId: MarkerId('Marker_main'),
+      position:
+          LatLng(double.parse(widget.mainLat), double.parse(widget.mainLng)),
+      infoWindow: InfoWindow(title: 'ตำแหน่งองค์กร'),
+      icon: BitmapDescriptor.defaultMarker,
+    ));
+    markers.add(Marker(
       markerId: MarkerId('Marker_user'),
       position: LatLng(double.parse(widget.lat), double.parse(widget.long)),
       infoWindow: InfoWindow(title: 'ตำแหน่งคุณ'),
       icon: BitmapDescriptor.defaultMarkerWithHue(95),
     ));
-
     return markers;
   }
 
@@ -74,7 +89,8 @@ class _OutsideDialogState extends State<OutsideDialog> {
     Set<Circle> circles = Set.from([
       Circle(
           circleId: CircleId('id'),
-          center: LatLng(double.parse(widget.lat), double.parse(widget.long)),
+          center: LatLng(
+              double.parse(widget.mainLat), double.parse(widget.mainLng)),
           radius: 30,
           strokeColor: Colors.blue[200].withOpacity(0.5),
           fillColor: Colors.blue[100].withOpacity(0.3),
@@ -246,20 +262,26 @@ class _OutsideDialogState extends State<OutsideDialog> {
         itemCount: _checkboxListTile.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
-              height: 35.0,
-              alignment: Alignment.topCenter,
-              child: CheckboxListTile(
-                controlAffinity: ListTileControlAffinity.leading,
-                title: Text(_checkboxListTile[index],
-                    style: TextStyle(
-                        fontFamily: FontStyles().FontFamily, fontSize: 22)),
-                value: false,
-                onChanged: (value) {
-                  setState(() {
-                    _checkboxListTile[index] = value;
-                  });
-                },
-              ));
+            height: 35.0,
+            alignment: Alignment.topCenter,
+            child: CheckboxListTile(
+              controlAffinity: ListTileControlAffinity.leading,
+              title: Text(
+                _checkboxListTile[index],
+                style: TextStyle(
+                    fontFamily: FontStyles().FontFamily, fontSize: 22),
+              ),
+              value: _checkbox[index],
+              onChanged: (value) {
+                setState(
+                  () {
+                    _checkbox[index] = value;
+                    print(_checkbox[index]);
+                  },
+                );
+              },
+            ),
+          );
         },
       ),
     );

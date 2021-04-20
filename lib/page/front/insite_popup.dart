@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:ismart_login/page/front/future/attend_future.dart';
-import 'package:ismart_login/page/front/model/attandStart.dart';
+import 'package:ismart_login/page/front/model/attendStart.dart';
 import 'package:ismart_login/page/front/outside_popup.dart';
 import 'package:ismart_login/page/main.dart';
 import 'package:ismart_login/style/font_style.dart';
@@ -210,6 +210,8 @@ class _InsiteDialogState extends State<InsiteDialog> {
                                 context: context,
                                 builder: (_) {
                                   return OutsideDialog(
+                                      mainLat: widget.lat.toString(),
+                                      mainLng: widget.long.toString(),
                                       lat: widget.myLat.toString(),
                                       long: widget.myLng.toString(),
                                       time: widget.time);

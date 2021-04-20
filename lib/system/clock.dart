@@ -46,6 +46,11 @@ class Clock {
     return lists[0] + ':' + lists[1];
   }
 
+  String convertTimeDot({String time}) {
+    List lists = time.split(":");
+    return lists[0] + '.' + lists[1];
+  }
+
   String onTime() {
     final DateTime now = DateTime.now();
     return DateFormat('HH:mm:s').format(now);

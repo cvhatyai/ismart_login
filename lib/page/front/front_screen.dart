@@ -9,7 +9,7 @@ import 'package:ismart_login/page/front/future/attend_future.dart';
 import 'package:ismart_login/page/front/future/org_future.dart';
 import 'package:ismart_login/page/front/history_day_widget.dart';
 import 'package:ismart_login/page/front/insite_popup.dart';
-import 'package:ismart_login/page/front/model/attandToDay.dart';
+import 'package:ismart_login/page/front/model/attendToDay.dart';
 import 'package:ismart_login/page/front/model/orglist.dart';
 import 'package:ismart_login/page/front/offside_popup.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
@@ -28,12 +28,6 @@ class FrontScreen extends StatefulWidget {
 }
 
 class _FrontScreenState extends State<FrontScreen> {
-  List sortTimeOthers = [
-    'สาย',
-    'ลาไม่เต็มวัน',
-    'ลืมลงชื่อเข้างาน',
-    'ทำงานนอกสถานที่'
-  ];
   int currentIndex = 0;
   TextEditingController _inputNote = TextEditingController();
   //---

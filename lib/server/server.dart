@@ -18,7 +18,9 @@ class Server {
   String getSummaryToDay = _baseUrl + "summary/attendDailyList";
   //----- Login Logout
   String getAttandCheck = _baseUrl + "attend";
+  String getAttandHistory = _baseUrl + "attend/attendHistory";
   String postAttandStart = _baseUrl + "attend/attendStart";
+  String postAttandEnd = _baseUrl + "attend/attendEnd";
   String postAttandUploadImages = _baseUrl + "attend/appUploadFile";
   Server() : super();
 }

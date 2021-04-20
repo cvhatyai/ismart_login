@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ismart_login/page/front/front_screen.dart';
 import 'package:ismart_login/page/main.dart';
@@ -22,6 +23,8 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  FToast fToast;
 
   TextEditingController _inputUsername = TextEditingController();
   TextEditingController _inputPassword = TextEditingController();
@@ -52,9 +55,13 @@ class _SignInScreenState extends State<SignInScreen> {
             builder: (context) => MainPage(),
           ),
         );
+        _showToast();
+      } else if (onValue[0]['msg'] == 'fail') {
+        EasyLoading.dismiss();
+        alert_non_signin(context, 'ไม่พบ Username');
       } else {
         EasyLoading.dismiss();
-        alert_non_signin(context);
+        alert_non_signin(context, 'Password ของคุณไม่ถูกต้อง');
       }
     });
     setState(() {});
@@ -135,6 +142,14 @@ class _SignInScreenState extends State<SignInScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
@@ -292,7 +307,7 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  alert_non_signin(BuildContext context) async {
+  alert_non_signin(BuildContext context, String text) async {
     return showDialog(
       barrierDismissible: true,
       context: context,
@@ -311,7 +326,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       EdgeInsets.only(top: 10, bottom: 10, left: 3, right: 3),
                   alignment: Alignment.center,
                   child: Text(
-                    'Username หรือ Password \nของคุณไม่ถูกต้อง',
+                    text,
                     style: TextStyle(
                         fontFamily: FontStyles().FontFamily,
                         fontSize: 24,
@@ -355,6 +370,37 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         );
       },
+    );
+  }
+
+  _showToast() async {
+    // this will be our toast UI
+    String name = await SharedCashe.getItemsWay(name: 'fullname');
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.greenAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text(
+            'สวัสดีคุณ ' + name,
+            style: TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 22),
+          ),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
     );
   }
 }

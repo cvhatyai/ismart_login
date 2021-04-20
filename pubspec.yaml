@@ -35,7 +35,9 @@ dependencies:
   app_settings: 4.1.0
   stacked_services:
   dio: ^4.0.0
+  #-- Action/Alert
   flutter_easyloading: ^3.0.0
+  fluttertoast: ^8.0.5
   #-- GPS
   location:
   google_maps_flutter: any
