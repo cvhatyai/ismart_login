@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -56,8 +57,6 @@ class _InsiteDialogState extends State<InsiteDialog> {
   @override
   void initState() {
     super.initState();
-    setLat = double.parse(widget.lat);
-    setLong = double.parse(widget.long);
   }
 
   @override
@@ -67,10 +66,10 @@ class _InsiteDialogState extends State<InsiteDialog> {
 
   distanc() {
     setState(() {
-      totalDistance = Geolocator.distanceBetween(
-          setLat, setLong, widget.myLat, widget.myLng);
+      totalDistance = Geolocator.distanceBetween(double.parse(widget.lat),
+          double.parse(widget.long), widget.myLat, widget.myLng);
     });
-
+    print('คุณอยู่ห่างจากองค์กร ' + totalDistance.toString() + ' เมตร');
     if (totalDistance <= 30) {
       return true;
     } else {
@@ -218,11 +217,13 @@ class _InsiteDialogState extends State<InsiteDialog> {
                                 });
                           } else {
                             Navigator.pop(context);
+                            EasyLoading.show();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MainPage()),
                             );
+                            EasyLoading.dismiss();
                           }
                         },
                         child: Container(

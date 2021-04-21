@@ -30,8 +30,12 @@ class FrontScreen extends StatefulWidget {
 class _FrontScreenState extends State<FrontScreen> {
   int currentIndex = 0;
   TextEditingController _inputNote = TextEditingController();
-  //---
 
+  //---
+  Location location = new Location();
+  double _myLat = 0.0;
+  double _myLng = 0.0;
+  //--
   Timer _timer;
   Timer _date;
   Timer _re;
@@ -65,6 +69,7 @@ class _FrontScreenState extends State<FrontScreen> {
 
   @override
   void initState() {
+    _getMyLocation();
     _getShaerd();
     _timeString = _formatTime(DateTime.now());
     _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
@@ -77,8 +82,14 @@ class _FrontScreenState extends State<FrontScreen> {
   void dispose() {
     _timer.cancel();
     _date.cancel();
-    _re.cancel();
     super.dispose();
+  }
+
+  _getMyLocation() {
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      _myLat = currentLocation.latitude.toDouble();
+      _myLng = currentLocation.longitude.toDouble();
+    });
   }
 
   // --- Post Data Member
@@ -584,10 +595,17 @@ class _FrontScreenState extends State<FrontScreen> {
       setState(() {
         _imageFile = pickedFile;
       });
-      location.onLocationChanged.listen((LocationData currentLocation) {
-        latitude = currentLocation.latitude.toDouble();
-        longitude = currentLocation.longitude.toDouble();
-      });
+      _getMyLocation();
+      Map _map = {
+        "uid": _items[0].ID,
+        "pathImage": pickedFile.path,
+        "lat": _resultOrg[0].LATITUDE,
+        "long": _resultOrg[0].LONGITUDE,
+        "time": _resultOrg[0].TIME_INSITE,
+        "myLat": _myLat,
+        "myLng": _myLng,
+      };
+      print(_map);
       showDialog(
           context: context,
           builder: (_) {
@@ -597,8 +615,8 @@ class _FrontScreenState extends State<FrontScreen> {
               lat: _resultOrg[0].LATITUDE,
               long: _resultOrg[0].LONGITUDE,
               time: _resultOrg[0].TIME_INSITE,
-              myLat: latitude,
-              myLng: longitude,
+              myLat: _myLat,
+              myLng: _myLng,
             );
           });
     } catch (e) {
@@ -618,10 +636,6 @@ class _FrontScreenState extends State<FrontScreen> {
       setState(() {
         _imageFile = pickedFile;
       });
-      location.onLocationChanged.listen((LocationData currentLocation) {
-        latitude = currentLocation.latitude.toDouble();
-        longitude = currentLocation.longitude.toDouble();
-      });
       showDialog(
           context: context,
           builder: (_) {
@@ -631,8 +645,8 @@ class _FrontScreenState extends State<FrontScreen> {
               lat: _resultOrg[0].LATITUDE,
               long: _resultOrg[0].LONGITUDE,
               time: _resultOrg[0].TIME_OUTSITE,
-              myLat: latitude,
-              myLng: longitude,
+              myLat: _myLat,
+              myLng: _myLng,
             );
           });
     } catch (e) {

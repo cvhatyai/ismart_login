@@ -1,7 +1,7 @@
 final String _baseUrl = 'http://ismartlogin.cityvariety.com/';
 
 class Server {
-  String url = _baseUrl;
+  static String url = _baseUrl;
   //------------
   //
   //--- OTP-----
