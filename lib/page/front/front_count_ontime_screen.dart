@@ -86,36 +86,48 @@ class _FrontCountOntimeScreenState extends State<FrontCountOntimeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  _items[index].FULLNAME,
-                  style: TextStyle(
-                      fontFamily: FontStyles().FontThaiSans, fontSize: 24),
+                Expanded(
+                  child: Container(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        _items[index].FULLNAME,
+                        style: TextStyle(
+                            fontFamily: FontStyles().FontThaiSans,
+                            fontSize: 24),
+                      ),
+                    ),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
                     alert_show_images(context, _items[index].START_IMAGE);
                   },
-                  child: Container(
-                    height: 100,
-                    child: Image.network(
-                      Server.url + _items[index].START_IMAGE,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent loadingProgress) {
-                        return Center(
-                          child: FadeInImage.assetNetwork(
-                              placeholder: cupertinoActivityIndicatorSmall,
-                              placeholderScale: 5,
-                              image: Server.url + _items[index].START_IMAGE),
-                        );
-                      },
+                  child: Expanded(
+                    child: Container(
+                      height: 100,
+                      child: FadeInImage.assetNetwork(
+                          placeholder: cupertinoActivityIndicatorSmall,
+                          placeholderScale: 5,
+                          width: WidhtDevice().widht(context) / 2,
+                          fit: BoxFit.contain,
+                          image: Server.url + _items[index].START_IMAGE),
                     ),
                   ),
                 ),
-                Text(
-                  _items[index].START_TIME + ' น.',
-                  style: TextStyle(
-                      fontFamily: FontStyles().FontThaiSans, fontSize: 24),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        _items[index].START_TIME + ' น.',
+                        style: TextStyle(
+                            fontFamily: FontStyles().FontThaiSans,
+                            fontSize: 24),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -31,6 +31,9 @@ class OutsideDialog extends StatefulWidget {
 }
 
 class _OutsideDialogState extends State<OutsideDialog> {
+  Location _location = new Location();
+  double latitude;
+  double longitude;
   double myLat = 0.0;
   double myLong = 0.0;
   double setLat = 0.0;
@@ -173,7 +176,7 @@ class _OutsideDialogState extends State<OutsideDialog> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          location.onLocationChanged
+                          _location.onLocationChanged
                               .listen((LocationData currentLocation) {
                             latitude = currentLocation.latitude.toDouble();
                             longitude = currentLocation.longitude.toDouble();

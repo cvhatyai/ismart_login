@@ -1,23 +1,23 @@
 import 'package:location/location.dart';
 
-Location location = new Location();
+Location _location = new Location();
 bool _serviceEnabled;
 PermissionStatus _permissionGranted;
-double latitude; // Latitude, in degrees
-double longitude; // Longitude, in degrees
+double _latitude; // Latitude, in degrees
+double _longitude; // Longitude, in degrees
 
 class LocationService {
   static checkService() async {
-    _serviceEnabled = await location.serviceEnabled();
+    _serviceEnabled = await _location.serviceEnabled();
     if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
+      _serviceEnabled = await _location.requestService();
       if (!_serviceEnabled) {
         return;
       }
     }
-    _permissionGranted = await location.hasPermission();
+    _permissionGranted = await _location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
+      _permissionGranted = await _location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
         return;
       }
@@ -27,10 +27,10 @@ class LocationService {
 
   getLocation() {
     String a = '';
-    location.onLocationChanged.listen((LocationData currentLocation) {
-      latitude = currentLocation.latitude.toDouble();
-      longitude = currentLocation.longitude.toDouble();
-      a = "" + latitude.toString() + "," + longitude.toString();
+    _location.onLocationChanged.listen((LocationData currentLocation) {
+      _latitude = currentLocation.latitude.toDouble();
+      _longitude = currentLocation.longitude.toDouble();
+      a = "" + _latitude.toString() + "," + _longitude.toString();
       print(a);
       return a;
     });

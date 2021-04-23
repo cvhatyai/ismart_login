@@ -82,40 +82,53 @@ class _FrontCountLateScreenState extends State<FrontCountLateScreen> {
         itemCount: _items.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
+            width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(top: 5, bottom: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  _items[index].FULLNAME,
-                  style: TextStyle(
-                      fontFamily: FontStyles().FontThaiSans, fontSize: 24),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      child: Text(
+                        _items[index].FULLNAME,
+                        style: TextStyle(
+                            fontFamily: FontStyles().FontThaiSans,
+                            fontSize: 24),
+                      ),
+                    ),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
                     alert_show_images(context, _items[index].START_IMAGE);
                   },
-                  child: Container(
-                    height: 100,
-                    child: Image.network(
-                      Server.url + _items[index].START_IMAGE,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent loadingProgress) {
-                        return Center(
-                          child: FadeInImage.assetNetwork(
-                              placeholder: cupertinoActivityIndicatorSmall,
-                              placeholderScale: 5,
-                              image: Server.url + _items[index].START_IMAGE),
-                        );
-                      },
+                  child: Expanded(
+                    child: Container(
+                      height: 100,
+                      child: FadeInImage.assetNetwork(
+                        placeholder: cupertinoActivityIndicatorSmall,
+                        placeholderScale: 5,
+                        width: WidhtDevice().widht(context) / 2,
+                        image: Server.url + _items[index].START_IMAGE,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
-                Text(
-                  _items[index].DESCRIPTION,
-                  style: TextStyle(
-                      fontFamily: FontStyles().FontThaiSans, fontSize: 24),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      child: Text(
+                        _items[index].DESCRIPTION,
+                        style: TextStyle(
+                            fontFamily: FontStyles().FontThaiSans,
+                            fontSize: 20),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

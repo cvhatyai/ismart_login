@@ -269,7 +269,7 @@ class _InsiteDialogState extends State<InsiteDialog> {
             Expanded(
               child: TextFormField(
                 controller: _inputNote,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 style: TextStyle(
                     fontFamily: FontStyles().FontFamily, fontSize: 22),
                 decoration: InputDecoration(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ismart_login/page/history/history_all_screen.dart';
+import 'package:ismart_login/page/history/history_me_screen.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/style/page_style.dart';
+import 'package:ismart_login/system/shared_preferences.dart';
 import 'package:ismart_login/system/widht_device.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -10,6 +13,13 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   TabController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,12 +74,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   Expanded(
                                     child: Container(
                                       child: TabBarView(children: [
-                                        Container(
-                                          child: Text("Home Body"),
-                                        ),
-                                        Container(
-                                          child: Text("Articles Body"),
-                                        ),
+                                        HistoryMeScreen(),
+                                        HistoryAllScreen(),
                                       ]),
                                     ),
                                   )

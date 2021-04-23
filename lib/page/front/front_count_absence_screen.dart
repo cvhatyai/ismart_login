@@ -81,15 +81,20 @@ class _FrontCountAbsenceScreenState extends State<FrontCountAbsenceScreen> {
         padding: EdgeInsets.all(8),
         itemCount: _items.length,
         itemBuilder: (BuildContext context, int index) {
-          return Container(
-            height: 30,
-            child: Row(children: [
-              Text(
-                _items[index].FULLNAME,
-                style: TextStyle(
-                    fontFamily: FontStyles().FontThaiSans, fontSize: 24),
-              )
-            ]),
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              height: 30,
+              child: Row(
+                children: [
+                  Text(
+                    _items[index].FULLNAME,
+                    style: TextStyle(
+                        fontFamily: FontStyles().FontThaiSans, fontSize: 24),
+                  )
+                ],
+              ),
+            ),
           );
         },
       ),

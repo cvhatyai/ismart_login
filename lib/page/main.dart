@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ismart_login/page/front/front_screen.dart';
 import 'package:ismart_login/page/history/history_screen.dart';
+import 'package:ismart_login/page/leave/leave_screen.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/system/widht_device.dart';
@@ -17,9 +18,7 @@ class _MainPageState extends State<MainPage> {
   int selectedIndex = 1;
 
   List _widgetOptions = [
-    Text(
-      'Index 0: Home',
-    ),
+    LeaveScreen(),
     FrontScreen(),
     HistoryScreen(),
   ];
