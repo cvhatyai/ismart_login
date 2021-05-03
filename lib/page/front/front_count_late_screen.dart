@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:ismart_login/page/front/model/sumaryToDay_late.dart';
@@ -100,35 +102,101 @@ class _FrontCountLateScreenState extends State<FrontCountLateScreen> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    alert_show_images(context, _items[index].START_IMAGE);
-                  },
-                  child: Expanded(
-                    child: Container(
-                      height: 100,
-                      child: FadeInImage.assetNetwork(
-                        placeholder: cupertinoActivityIndicatorSmall,
-                        placeholderScale: 5,
-                        width: WidhtDevice().widht(context) / 2,
-                        image: Server.url + _items[index].START_IMAGE,
-                        fit: BoxFit.contain,
-                      ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      alert_show_images(context, _items[index].START_IMAGE);
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 100,
+                          child: FadeInImage.assetNetwork(
+                            placeholder: cupertinoActivityIndicatorSmall,
+                            placeholderScale: 5,
+                            width: WidhtDevice().widht(context) / 2,
+                            image: Server.url + _items[index].START_IMAGE,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            _items[index].DESCRIPTION,
+                            style: TextStyle(
+                                fontFamily: FontStyles().FontThaiSans,
+                                fontSize: 20),
+                          ),
+                        ),
+                        _items[index].START_NOTE != ''
+                            ? Container(
+                                alignment: Alignment.center,
+                                width: WidhtDevice().widht(context) / 3.5,
+                                child: Text(
+                                  _items[index].START_NOTE,
+                                  style: TextStyle(
+                                      fontFamily: FontStyles().FontFamily,
+                                      fontSize: 18,
+                                      height: 1,
+                                      color: Colors.red[200]),
+                                ),
+                              )
+                            : Container(
+                                height: 0,
+                              ),
+                        _items[index].START_LOCATION_STATUS == '1'
+                            ? GestureDetector(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: WidhtDevice().widht(context) / 3.5,
+                                  child: Text(
+                                    'ไม่อยู่ในพื้นที่ : ' +
+                                        _getStatusLocation(_items[index]
+                                            .START_LOCATION_SUB_STATUS),
+                                    style: TextStyle(
+                                        fontFamily: FontStyles().FontFamily,
+                                        fontSize: 18,
+                                        height: 1,
+                                        color: Colors.red[200]),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 0,
+                              ),
+                      ],
                     ),
                   ),
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                      child: Text(
-                        _items[index].DESCRIPTION,
-                        style: TextStyle(
-                            fontFamily: FontStyles().FontThaiSans,
-                            fontSize: 20),
-                      ),
-                    ),
-                  ),
+                  child: _items[index].END_TIME == ''
+                      ? Container()
+                      : GestureDetector(
+                          onTap: () {
+                            alert_show_images(context, _items[index].END_IMAGE);
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 100,
+                                child: FadeInImage.assetNetwork(
+                                  placeholder: cupertinoActivityIndicatorSmall,
+                                  placeholderScale: 5,
+                                  width: WidhtDevice().widht(context) / 2,
+                                  image: Server.url + _items[index].END_IMAGE,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  _items[index].END_TIME,
+                                  style: TextStyle(
+                                      fontFamily: FontStyles().FontThaiSans,
+                                      fontSize: 20),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -136,6 +204,21 @@ class _FrontCountLateScreenState extends State<FrontCountLateScreen> {
         },
       ),
     );
+  }
+
+  _getStatusLocation(String _status) {
+    String _txt = '';
+    if (_status != '' && _status != null) {
+      List _list = json.decode(_status);
+      List _checkboxListTile = ['โปรแกรมระบุตำแหน่งผิดพลาด', 'ทำงานนอกสถานที่'];
+      if (_list.length > 0) {
+        for (int i = 0; i < _list.length; i++) {
+          _txt += _checkboxListTile[int.parse(_list[i])] + ', ';
+        }
+      }
+    }
+
+    return _txt;
   }
 
   alert_show_images(BuildContext context, String images) async {

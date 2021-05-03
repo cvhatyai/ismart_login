@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:ismart_login/page/front/future/attend_future.dart';
+import 'package:ismart_login/page/front/model/attendUpdateStart.dart';
 import 'package:ismart_login/page/main.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/system/clock.dart';
@@ -14,13 +18,15 @@ final currentTime = DateTime.now();
 
 class OutsideDialog extends StatefulWidget {
   final String lat;
+  final String uid;
   final String long;
   final String mainLat;
   final String mainLng;
   final String time;
   OutsideDialog(
       {Key key,
-      @required this.lat,
+      @required this.uid,
+      this.lat,
       this.long,
       this.time,
       this.mainLat,
@@ -31,6 +37,7 @@ class OutsideDialog extends StatefulWidget {
 }
 
 class _OutsideDialogState extends State<OutsideDialog> {
+  FToast fToast;
   Location _location = new Location();
   double latitude;
   double longitude;
@@ -39,8 +46,12 @@ class _OutsideDialogState extends State<OutsideDialog> {
   double setLat = 0.0;
   double setLong = 0.0;
   double totalDistance = 0;
+
+  ///----
   List _checkboxListTile = ['โปรแกรมระบุตำแหน่งผิดพลาด', 'ทำงานนอกสถานที่'];
   List<bool> _checkbox = [false, false];
+  List<String> _select = [];
+  //------
   int currentIndex = 0;
   TextEditingController _inputNote = TextEditingController();
   //----
@@ -50,6 +61,23 @@ class _OutsideDialogState extends State<OutsideDialog> {
     super.initState();
     setLat = double.parse(widget.lat);
     setLong = double.parse(widget.long);
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  ///--
+  List<ItemsUpdateAttandStartResult> _result = [];
+  Future<bool> onLoadUpdateLocationAttandStart(Map map) async {
+    await AttandFuture().apiUpdateAttandStart(map).then((onValue) {
+      print(onValue[0].MSG);
+      if (onValue[0].STATUS == 'success') {
+        _result = onValue;
+        _showToast(true, _result[0].MSG);
+      } else {
+        _showToast(false, _result[0].MSG);
+      }
+    });
+    return true;
   }
 
   myLocation() {
@@ -176,19 +204,12 @@ class _OutsideDialogState extends State<OutsideDialog> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          _location.onLocationChanged
-                              .listen((LocationData currentLocation) {
-                            latitude = currentLocation.latitude.toDouble();
-                            longitude = currentLocation.longitude.toDouble();
-                          });
                           Map _map = {
-                            "time": Clock().getTime(),
-                            "lat": latitude.toString(),
-                            "long": longitude.toString(),
-                            "cause": currentIndex,
-                            "causenote": _inputNote.text,
+                            "uid": widget.uid,
+                            "start_location_note": json.encode(_select),
                           };
                           print(_map);
+                          onLoadUpdateLocationAttandStart(_map);
                           Navigator.pop(context);
                           Navigator.push(
                             context,
@@ -280,6 +301,12 @@ class _OutsideDialogState extends State<OutsideDialog> {
                   () {
                     _checkbox[index] = value;
                     print(_checkbox[index]);
+                    if (value) {
+                      _select.add(index.toString());
+                    } else {
+                      _select.remove(index.toString());
+                    }
+                    print(_select);
                   },
                 );
               },
@@ -287,6 +314,36 @@ class _OutsideDialogState extends State<OutsideDialog> {
           );
         },
       ),
+    );
+  }
+
+  _showToast(bool _status, String _text) async {
+    // this will be our toast UI
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: _status ? Colors.greenAccent : Colors.redAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(_status ? Icons.check : Icons.close),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text(
+            _text,
+            style: TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 22),
+          ),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 5),
     );
   }
 }

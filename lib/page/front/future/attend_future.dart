@@ -6,6 +6,7 @@ import 'package:ismart_login/page/front/model/attendEnd.dart';
 import 'package:ismart_login/page/front/model/attendHistory.dart';
 import 'package:ismart_login/page/front/model/attendStart.dart';
 import 'package:ismart_login/page/front/model/attendToDay.dart';
+import 'package:ismart_login/page/front/model/attendUpdateStart.dart';
 
 import 'package:ismart_login/server/server.dart';
 
@@ -49,6 +50,25 @@ class AttandFuture {
       List responseJson = json.decode(response.body);
       return responseJson
           .map((m) => new ItemsAttandStartResult.fromJson(m))
+          .toList();
+    } else {
+      print('Something went wrong. \nResponse Code : ${response.statusCode}');
+    }
+  }
+
+  Future<List<ItemsUpdateAttandStartResult>> apiUpdateAttandStart(
+      Map jsonMap) async {
+    //encode Map to JSON
+    var body = json.encode(jsonMap);
+    final response = await http.post(
+      Uri.parse(Server().updateAttandStart),
+      headers: header,
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      List responseJson = json.decode(response.body);
+      return responseJson
+          .map((m) => new ItemsUpdateAttandStartResult.fromJson(m))
           .toList();
     } else {
       print('Something went wrong. \nResponse Code : ${response.statusCode}');

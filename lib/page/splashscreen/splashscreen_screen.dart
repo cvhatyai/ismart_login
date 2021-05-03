@@ -9,6 +9,7 @@ import 'package:ismart_login/page/sign/model/memberresult.dart';
 import 'package:ismart_login/page/sign/signin_screen.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/system/gps.dart';
+import 'package:ismart_login/page/protect/protected.dart';
 import 'package:ismart_login/system/shared_preferences.dart';
 import 'package:ismart_login/system/widht_device.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,6 +22,8 @@ class SplashscreenScreen extends StatefulWidget {
 
 class _SplashscreenScreenState extends State<SplashscreenScreen> {
   bool sent = false;
+  bool protect = false;
+
   FToast fToast;
 
   _controllerLoginAuto() async {
@@ -69,9 +72,26 @@ class _SplashscreenScreenState extends State<SplashscreenScreen> {
     }
   }
 
+  check_protect() async {
+    bool _bool = false;
+    _bool = await SharedCashe.getItemsBoolWay(key: 'setProtect');
+    if (_bool == null) {
+      _bool = false;
+    }
+    print('vv ' + _bool.toString());
+    setState(() {
+      protect = _bool;
+    });
+    if (protect) {
+      _controllerLoginAuto();
+    }
+    // print(protect);
+  }
+
   @override
   void initState() {
-    _controllerLoginAuto();
+    check_protect();
+
     LocationService.checkService();
     super.initState();
     fToast = FToast();
@@ -82,7 +102,11 @@ class _SplashscreenScreenState extends State<SplashscreenScreen> {
   Widget build(BuildContext context) {
     return SplashScreen(
       seconds: 7,
-      navigateAfterSeconds: sent ? MainPage() : SignInScreen(),
+      navigateAfterSeconds: protect
+          ? sent
+              ? MainPage()
+              : SignInScreen()
+          : ProtectApp(),
       title: new Text(
         'iSmartLogin',
         style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
@@ -111,7 +135,7 @@ class _SplashscreenScreenState extends State<SplashscreenScreen> {
             width: 12.0,
           ),
           Text(
-            'สวัสดีคุณ ' + name,
+            'สวัสดี คุณ' + name,
             style: TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 22),
           ),
         ],

@@ -106,13 +106,36 @@ class _MainPageState extends State<MainPage> {
                               color: Colors.grey[100],
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(20.0),
+                              ),
+                            ),
+                            height: 50,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ไม่',
+                              style: TextStyle(
+                                  fontFamily: FontStyles().FontFamily,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red[100],
+                              borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(20.0),
                               ),
                             ),
                             height: 50,
                             alignment: Alignment.center,
                             child: Text(
-                              'ปิด',
+                              'ตกลง',
                               style: TextStyle(
                                   fontFamily: FontStyles().FontFamily,
                                   fontSize: 22,

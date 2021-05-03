@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:ismart_login/page/front/drawer.dart';
 import 'package:ismart_login/page/front/front_count_widget.dart';
 import 'package:ismart_login/page/front/future/attend_future.dart';
 import 'package:ismart_login/page/front/future/org_future.dart';
@@ -12,6 +13,7 @@ import 'package:ismart_login/page/front/insite_popup.dart';
 import 'package:ismart_login/page/front/model/attendToDay.dart';
 import 'package:ismart_login/page/front/model/orglist.dart';
 import 'package:ismart_login/page/front/offside_popup.dart';
+import 'package:ismart_login/page/main.dart';
 import 'package:ismart_login/page/sign/model/memberlist.dart';
 import 'package:ismart_login/page/sign/signout_popup.dart';
 import 'package:ismart_login/style/font_style.dart';
@@ -28,6 +30,7 @@ class FrontScreen extends StatefulWidget {
 }
 
 class _FrontScreenState extends State<FrontScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int currentIndex = 0;
   TextEditingController _inputNote = TextEditingController();
 
@@ -87,8 +90,10 @@ class _FrontScreenState extends State<FrontScreen> {
 
   _getMyLocation() {
     location.onLocationChanged.listen((LocationData currentLocation) {
-      _myLat = currentLocation.latitude.toDouble();
-      _myLng = currentLocation.longitude.toDouble();
+      setState(() {
+        _myLat = currentLocation.latitude.toDouble();
+        _myLng = currentLocation.longitude.toDouble();
+      });
     });
   }
 
@@ -177,6 +182,12 @@ class _FrontScreenState extends State<FrontScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: MenuDrawer(
+        images: _items[0].FULLNAME,
+        fullname: _items[0].FULLNAME,
+        org: _items[0].ORG_NAME,
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -201,7 +212,8 @@ class _FrontScreenState extends State<FrontScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  alert_signout(context);
+                                  _scaffoldKey.currentState.openDrawer();
+                                  // alert_signout(context);
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(top: 15),
@@ -313,7 +325,15 @@ class _FrontScreenState extends State<FrontScreen> {
                                             style: styleTime,
                                           ),
                                           GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MainPage(),
+                                                ),
+                                              );
+                                            },
                                             child: FaIcon(
                                               FontAwesomeIcons.sync,
                                               color: Colors.white,

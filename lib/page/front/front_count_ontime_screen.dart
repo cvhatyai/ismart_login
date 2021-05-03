@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:ismart_login/page/front/model/sumaryToDay_ontime.dart';
@@ -99,11 +101,11 @@ class _FrontCountOntimeScreenState extends State<FrontCountOntimeScreen> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    alert_show_images(context, _items[index].START_IMAGE);
-                  },
-                  child: Expanded(
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      alert_show_images(context, _items[index].START_IMAGE);
+                    },
                     child: Container(
                       height: 100,
                       child: FadeInImage.assetNetwork(
@@ -118,14 +120,37 @@ class _FrontCountOntimeScreenState extends State<FrontCountOntimeScreen> {
                 Expanded(
                   child: Container(
                     alignment: Alignment.center,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Text(
-                        _items[index].START_TIME + ' น.',
-                        style: TextStyle(
-                            fontFamily: FontStyles().FontThaiSans,
-                            fontSize: 24),
-                      ),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Text(
+                            _items[index].START_TIME + ' น.',
+                            style: TextStyle(
+                                fontFamily: FontStyles().FontThaiSans,
+                                fontSize: 24),
+                          ),
+                        ),
+                        _items[index].START_LOCATION_STATUS == '1'
+                            ? GestureDetector(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: WidhtDevice().widht(context) / 3.5,
+                                  child: Text(
+                                    'ไม่อยู่ในพื้นที่ : ' +
+                                        _getStatusLocation(_items[index]
+                                            .START_LOCATION_SUB_STATUS),
+                                    style: TextStyle(
+                                        fontFamily: FontStyles().FontFamily,
+                                        fontSize: 18,
+                                        height: 1,
+                                        color: Colors.red[200]),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 0,
+                              ),
+                      ],
                     ),
                   ),
                 ),
@@ -135,6 +160,21 @@ class _FrontCountOntimeScreenState extends State<FrontCountOntimeScreen> {
         },
       ),
     );
+  }
+
+  _getStatusLocation(String _status) {
+    String _txt = '';
+    if (_status != '' && _status != null) {
+      List _list = json.decode(_status);
+      List _checkboxListTile = ['โปรแกรมระบุตำแหน่งผิดพลาด', 'ทำงานนอกสถานที่'];
+      if (_list.length > 0) {
+        for (int i = 0; i < _list.length; i++) {
+          _txt += _checkboxListTile[int.parse(_list[i])] + ', ';
+        }
+      }
+    }
+
+    return _txt;
   }
 
   alert_show_images(BuildContext context, String images) async {

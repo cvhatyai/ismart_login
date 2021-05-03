@@ -197,6 +197,7 @@ class _InsiteDialogState extends State<InsiteDialog> {
                             "longitude": widget.myLng.toString(),
                             "start_status": currentIndex + 1,
                             "start_note": _inputNote.text,
+                            "start_location_status": distanc() ? '0' : '1',
                           };
                           print(_map);
                           onLoadAttandStart(_map);
@@ -209,6 +210,7 @@ class _InsiteDialogState extends State<InsiteDialog> {
                                 context: context,
                                 builder: (_) {
                                   return OutsideDialog(
+                                      uid: widget.uid,
                                       mainLat: widget.lat.toString(),
                                       mainLng: widget.long.toString(),
                                       lat: widget.myLat.toString(),
@@ -258,33 +260,33 @@ class _InsiteDialogState extends State<InsiteDialog> {
 
   _causeNote() {
     return Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Text(
-              'สาเหตุ',
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Text(
+            'สาเหตุ',
+            style: TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 22),
+          ),
+          Expanded(
+            child: TextFormField(
+              controller: _inputNote,
+              keyboardType: TextInputType.text,
               style:
                   TextStyle(fontFamily: FontStyles().FontFamily, fontSize: 22),
-            ),
-            Expanded(
-              child: TextFormField(
-                controller: _inputNote,
-                keyboardType: TextInputType.text,
-                style: TextStyle(
-                    fontFamily: FontStyles().FontFamily, fontSize: 22),
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(0), // add padding to adjust icon
-                    child: Icon(
-                      Icons.edit,
-                      size: 22,
-                    ),
+              decoration: InputDecoration(
+                prefixIcon: Padding(
+                  padding: EdgeInsets.all(0), // add padding to adjust icon
+                  child: Icon(
+                    Icons.edit,
+                    size: 22,
                   ),
                 ),
               ),
-            )
-          ],
-        ));
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   _radioButton() {

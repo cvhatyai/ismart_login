@@ -59,7 +59,7 @@ alert_signout(BuildContext context) async {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          SharedCashe.clearShaeredAll();
+                          SharedCashe.clearShaeredForLogout();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

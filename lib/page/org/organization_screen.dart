@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ismart_login/page/org/create_screen.dart';
 import 'package:ismart_login/page/org/join_detail_screen.dart';
 import 'package:ismart_login/page/org/join_screen.dart';
 import 'package:ismart_login/style/font_style.dart';
 import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/system/widht_device.dart';
+import 'package:location/location.dart';
 
 class OrganizationScreen extends StatefulWidget {
   @override
@@ -11,6 +13,7 @@ class OrganizationScreen extends StatefulWidget {
 }
 
 class _OrganizationScreenState extends State<OrganizationScreen> {
+  Location _location = new Location();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,6 +132,26 @@ class _OrganizationScreenState extends State<OrganizationScreen> {
                         ),
                         Padding(padding: EdgeInsets.all(5)),
                         GestureDetector(
+                          onTap: () {
+                            double lat = 0.0;
+                            double lng = 0.0;
+                            _location.onLocationChanged
+                                .listen((LocationData currentLocation) {
+                              setState(() {
+                                lat = currentLocation.latitude.toDouble();
+                                lng = currentLocation.longitude.toDouble();
+                              });
+                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrganizationCreateScreen(
+                                  lat: lat,
+                                  lng: lng,
+                                ),
+                              ),
+                            );
+                          },
                           child: Card(
                             shadowColor: Color(0xFFE8E8E8),
                             elevation: 3.0,

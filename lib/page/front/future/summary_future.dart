@@ -17,24 +17,6 @@ final Map<String, String> header = {
 
 class SummaryFuture {
   SummaryFuture() : super();
-  //---
-  Future<List<ItemsSummaryAllDay>> apiGetSummaryAllDay(Map jsonMap) async {
-    //encode Map to JSON
-    var body = json.encode(jsonMap);
-    final response = await http.post(
-      Uri.parse(Server().getSummaryAllDay),
-      headers: header,
-      body: body,
-    );
-    if (response.statusCode == 200) {
-      List responseJson = json.decode(response.body);
-      return responseJson
-          .map((m) => new ItemsSummaryAllDay.fromJson(m))
-          .toList();
-    } else {
-      print('Something went wrong. \nResponse Code : ${response.statusCode}');
-    }
-  }
 
   //----
   Future<List<ItemsSummaryToDay>> apiGetSummaryToDay(Map jsonMap) async {

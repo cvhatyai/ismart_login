@@ -31,8 +31,36 @@ class SharedCashe {
     return item;
   }
 
+  static Future<bool> getItemsBoolWay({String key}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool item = prefs.getBool(key);
+    print(item);
+    return item;
+  }
+
+  static savaItemsString({String key, String valString}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(key, valString);
+  }
+
+  static savaItemsBool({String key, bool valBool}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(key, valBool);
+    print(prefs.getBool(key));
+  }
+
   static clearShaeredAll() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+  }
+
+  static clearShaeredForLogout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getKeys();
+    for (String key in prefs.getKeys()) {
+      if (key != "setProtect" && key != "keyInvite") {
+        prefs.remove(key);
+      }
+    }
   }
 }

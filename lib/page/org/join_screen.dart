@@ -8,6 +8,7 @@ import 'package:ismart_login/style/page_style.dart';
 import 'package:ismart_login/system/scan_qr.dart';
 import 'package:ismart_login/system/widht_device.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:location/location.dart';
 
 class OrganizationJoinScreen extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class OrganizationJoinScreen extends StatefulWidget {
 
 class _OrganizationJoinScreenState extends State<OrganizationJoinScreen> {
   TextEditingController _inputCode = TextEditingController();
+  Location location = new Location();
   //---
   _navigateAndDisplaySelection(BuildContext context) async {
     // Navigator.push returns a Future that completes after calling

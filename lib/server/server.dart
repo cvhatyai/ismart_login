@@ -21,7 +21,10 @@ class Server {
   String getAttandCheck = _baseUrl + "attend";
   String getAttandHistory = _baseUrl + "attend/attendHistory";
   String postAttandStart = _baseUrl + "attend/attendStart";
+  String updateAttandStart = _baseUrl + "attend/updateAttendStart";
   String postAttandEnd = _baseUrl + "attend/attendEnd";
   String postAttandUploadImages = _baseUrl + "attend/appUploadFile";
+  //------ รหัสเชิญ
+  String getKeyInvite = _baseUrl + 'protectapp/protect';
   Server() : super();
 }

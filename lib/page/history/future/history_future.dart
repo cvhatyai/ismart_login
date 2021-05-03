@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ismart_login/page/front/model/sumaryAllDay.dart';
-import 'package:ismart_login/page/front/model/sumaryToDay.dart';
+import 'package:ismart_login/page/history/model/itemAllHistory.dart';
 import 'package:ismart_login/page/history/model/itemMyHistory.dart';
 import 'package:ismart_login/server/server.dart';
 
@@ -35,5 +34,19 @@ class HistoryFuture {
   }
 
   //----
-
+  Future<List<ItemsAllHistory>> apiGetSummaryAllDay(Map jsonMap) async {
+    //encode Map to JSON
+    var body = json.encode(jsonMap);
+    final response = await http.post(
+      Uri.parse(Server().getSummaryAllDay),
+      headers: header,
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      List responseJson = json.decode(response.body);
+      return responseJson.map((m) => new ItemsAllHistory.fromJson(m)).toList();
+    } else {
+      print('Something went wrong. \nResponse Code : ${response.statusCode}');
+    }
+  }
 }

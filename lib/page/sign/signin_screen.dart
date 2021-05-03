@@ -22,6 +22,9 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  TextEditingController _inputPass = TextEditingController();
+
+  bool checkProtect = false;
   final _formKey = GlobalKey<FormState>();
 
   FToast fToast;
@@ -154,156 +157,248 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: StylePage().background,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'iSmartLogin',
-                      style: TextStyle(
-                          fontFamily: FontStyles().FontFamily,
-                          fontSize: 46,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal),
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 20),
-                    width: WidhtDevice().widht(context),
-                    decoration: StylePage().boxWhite,
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 15),
-                          alignment: Alignment.center,
-                          width: 100,
-                          height: 100,
-                          decoration: new BoxDecoration(
-                            color: Color(0xFF18C0FF),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.person,
+    return WillPopScope(
+      onWillPop: alert_back_system,
+      child: Scaffold(
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: StylePage().background,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'iSmartLogin',
+                        style: TextStyle(
+                            fontFamily: FontStyles().FontFamily,
+                            fontSize: 46,
                             color: Colors.white,
-                            size: 75,
-                          ),
-                        ),
-                        Text(
-                          'เข้าใช้งาน',
-                          style: TextStyle(
-                              fontFamily: FontStyles().FontFamily,
-                              fontSize: 46),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.only(top: 40, left: 20, right: 20),
-                          child: formlogin(),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                child: Text('ลืมรหัสผ่าน',
-                                    style: TextStyle(
-                                        fontFamily: FontStyles().FontFamily,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 10, right: 10),
-                                child: Text(
-                                  '|',
-                                  style: TextStyle(fontSize: 30),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignUpScreen()),
-                                  );
-                                },
-                                child: Text('ลงทะเบียน',
-                                    style: TextStyle(
-                                        fontFamily: FontStyles().FontFamily,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24)),
-                              )
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              MaterialButton(
-                                onPressed: () {
-                                  print('facebook');
-                                },
-                                color: Color(0xFF3B5998),
-                                child: FaIcon(
-                                  FontAwesomeIcons.facebookF,
-                                  color: Colors.white,
-                                  size: 26,
-                                ),
-                                padding: EdgeInsets.all(12),
-                                shape: CircleBorder(),
-                              ),
-                              MaterialButton(
-                                onPressed: () {
-                                  print('line');
-                                },
-                                color: Color(0xFF00C300),
-                                child: Image.asset(
-                                  'assets/images/social/line.png',
-                                  width: 26,
-                                  fit: BoxFit.fill,
-                                ),
-                                padding: EdgeInsets.all(12),
-                                shape: CircleBorder(),
-                              ),
-                              MaterialButton(
-                                onPressed: () {
-                                  print('apple');
-                                },
-                                color: Color(0xFFA3AAAE),
-                                child: FaIcon(
-                                  FontAwesomeIcons.apple,
-                                  color: Colors.white,
-                                  size: 26,
-                                ),
-                                padding: EdgeInsets.all(12),
-                                shape: CircleBorder(),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                            fontWeight: FontWeight.normal),
+                      ),
                     ),
-                  ),
-                ],
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 5, right: 5, top: 10, bottom: 20),
+                      width: WidhtDevice().widht(context),
+                      decoration: StylePage().boxWhite,
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 15),
+                            alignment: Alignment.center,
+                            width: 100,
+                            height: 100,
+                            decoration: new BoxDecoration(
+                              color: Color(0xFF18C0FF),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 75,
+                            ),
+                          ),
+                          Text(
+                            'เข้าใช้งาน',
+                            style: TextStyle(
+                                fontFamily: FontStyles().FontFamily,
+                                fontSize: 46),
+                          ),
+                          Container(
+                            padding:
+                                EdgeInsets.only(top: 40, left: 20, right: 20),
+                            child: formlogin(),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  child: Text('ลืมรหัสผ่าน',
+                                      style: TextStyle(
+                                          fontFamily: FontStyles().FontFamily,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24)),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10, right: 10),
+                                  child: Text(
+                                    '|',
+                                    style: TextStyle(fontSize: 30),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignUpScreen()),
+                                    );
+                                  },
+                                  child: Text('ลงทะเบียน',
+                                      style: TextStyle(
+                                          fontFamily: FontStyles().FontFamily,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24)),
+                                )
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                MaterialButton(
+                                  onPressed: () {
+                                    print('facebook');
+                                  },
+                                  color: Color(0xFF3B5998),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.facebookF,
+                                    color: Colors.white,
+                                    size: 26,
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  shape: CircleBorder(),
+                                ),
+                                MaterialButton(
+                                  onPressed: () {
+                                    print('line');
+                                  },
+                                  color: Color(0xFF00C300),
+                                  child: Image.asset(
+                                    'assets/images/social/line.png',
+                                    width: 26,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  shape: CircleBorder(),
+                                ),
+                                MaterialButton(
+                                  onPressed: () {
+                                    print('apple');
+                                  },
+                                  color: Color(0xFFA3AAAE),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.apple,
+                                    color: Colors.white,
+                                    size: 26,
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  shape: CircleBorder(),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<bool> alert_back_system() {
+    return showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          contentPadding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+          content: Container(
+            width: WidhtDevice().widht(context),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding:
+                      EdgeInsets.only(top: 10, bottom: 10, left: 3, right: 3),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'คุณต้องการออกจากแอปพลิเคชัน',
+                    style: TextStyle(
+                        fontFamily: FontStyles().FontFamily,
+                        fontSize: 24,
+                        height: 1),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20.0),
+                              ),
+                            ),
+                            height: 50,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ไม่',
+                              style: TextStyle(
+                                  fontFamily: FontStyles().FontFamily,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red[100],
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(20.0),
+                              ),
+                            ),
+                            height: 50,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ตกลง',
+                              style: TextStyle(
+                                  fontFamily: FontStyles().FontFamily,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
